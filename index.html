@@ -884,7 +884,9 @@ async function carregar() {
     if (!r.ok) throw new Error("http " + r.status);
     iniciar(await r.json(), "Dados lidos de agenda.json");
   } catch (e) {
-    iniciar(JSON.parse(JSON.stringify(AGENDA_INICIAL)), "Dados de exemplo (teste). Use Abrir arquivo ou Novo arquivo.");
+    if (pendente) iniciar(agendaVazia(), "Clique em Reabrir " + pendente.name + " para carregar a sua agenda.");
+    else if (location.protocol === "file:") iniciar(JSON.parse(JSON.stringify(AGENDA_INICIAL)), "Dados de exemplo (teste). Use Abrir arquivo ou Novo arquivo.");
+    else iniciar(agendaVazia(), "Nenhuma agenda carregada. Use Arquivo, Abrir para escolher o seu agenda.json.");
   }
   if (pendente) { $("btnReabrir").textContent = "Reabrir " + pendente.name; $("btnReabrir").classList.remove("oculto"); }
 }
