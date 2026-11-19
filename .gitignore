@@ -1,0 +1,5 @@
+# Dados reais da agenda (nomes de alunos e bancas) nunca vão para o repositório
+*.json
+*.zip
+*.pdf
+*.png
