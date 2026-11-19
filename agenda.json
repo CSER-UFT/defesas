@@ -2,7 +2,7 @@
  "formato": "agendatcc",
  "schema": 1,
  "nome": "Agenda de TCC",
- "salvoEm": 1795103597973,
+ "salvoEm": 1795110167355,
  "config": {
   "titulo": "AGENDA DE DEFESAS DE TCC",
   "subtitulo": "",
@@ -382,6 +382,13 @@
   {
    "profId": "p2",
    "data": "02/12/2026",
+   "inicio": "08:00",
+   "fim": "12:00",
+   "motivo": "Aula"
+  },
+  {
+   "profId": "p1",
+   "data": "04/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
    "motivo": "Aula"
