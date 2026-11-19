@@ -1,5 +1,7 @@
-# Dados reais da agenda (nomes de alunos e bancas) nunca vão para o repositório
-*.json
+# Arquivos gerados e dados de trabalho ficam fora do repositório
 *.zip
 *.pdf
 *.png
+# Somente a cópia pública da agenda (sem o log) é publicada
+*.json
+!agenda.json
