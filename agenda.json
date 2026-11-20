@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795212302282,
+  "salvoEm": 1795218921670,
   "config": {
     "titulo": "AGENDA DE DEFESAS DE TCC",
     "subtitulo": "",
@@ -417,6 +417,16 @@
       "ts": 1795212288413,
       "tipo": "sala",
       "texto": "Link da sala «Remoto» atualizado."
+    },
+    {
+      "ts": 1795212929350,
+      "tipo": "defesa",
+      "texto": "Defesa de «Neci Mendes Fialho» movida de 03/12/2026 08:00 para 02/12/2026 08:00."
+    },
+    {
+      "ts": 1795212930789,
+      "tipo": "defesa",
+      "texto": "Defesa de «Neci Mendes Fialho» movida de 02/12/2026 08:00 para 03/12/2026 08:00."
     }
   ]
 }
