@@ -2,7 +2,7 @@
  "formato": "agendatcc",
  "schema": 1,
  "nome": "Agenda de TCC",
- "salvoEm": 1795147650111,
+ "salvoEm": 1795209362883,
  "config": {
   "titulo": "AGENDA DE DEFESAS DE TCC",
   "subtitulo": "",
@@ -341,6 +341,23 @@
     "p1",
     "p2"
    ]
+  },
+  {
+   "id": "dmwphanoxex6",
+   "alunoId": "amwnmynaewqv",
+   "fases": [
+    "TCC1"
+   ],
+   "titulo": "",
+   "data": "02/12/2026",
+   "inicio": "09:00",
+   "duracao": 40,
+   "salaId": null,
+   "bancaIds": [
+    "pmwmwsgtt6zb",
+    "p3",
+    "p1"
+   ]
   }
  ],
  "indisponibilidades": [
@@ -349,49 +366,49 @@
    "data": "02/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p4",
    "data": "03/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p2",
    "data": "01/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p1",
    "data": "01/12/2026",
    "inicio": "14:00",
    "fim": "18:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p1",
    "data": "02/12/2026",
    "inicio": "14:00",
    "fim": "18:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p2",
    "data": "02/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
-   "motivo": "Aula"
+   "motivo": ""
   },
   {
    "profId": "p1",
    "data": "04/12/2026",
    "inicio": "08:00",
    "fim": "12:00",
-   "motivo": "Aula"
+   "motivo": ""
   }
  ],
  "log": []
