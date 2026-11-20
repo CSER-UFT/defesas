@@ -16,6 +16,7 @@ json.dump(d, open(sys.argv[2], "w", encoding="utf-8"), ensure_ascii=False, inden
 PY
 python3 build.py --verificar || { echo "Corrija a agenda e rode de novo. Nada foi publicado."; git checkout -- agenda.json; exit 1; }
 git add agenda.json
+[ -d trabalhos ] && git add trabalhos
 if git diff --cached --quiet; then echo "Sem mudanças para publicar."; exit 0; fi
 git commit -m "Atualizar agenda de defesas"
 git push

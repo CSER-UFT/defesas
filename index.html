@@ -113,6 +113,9 @@
   .form1 input, .form1 select { height:34px; padding:0 9px; font:inherit; border:1px solid var(--bord); border-radius:8px; background:#fff; }
   small.n { color:var(--mut); }
   @media print { header, .abas, .chips, .toolbar, .dica, #status { display:none !important; } .editando .dia { cursor:auto; } }
+  a.bt { display:inline-block; font-size:.88rem; padding:6px 12px; border:1px solid var(--bord); border-radius:8px; color:var(--azul); text-decoration:none; background:#fff; }
+  a.bt:hover { background:var(--cinza); }
+  .itemDia a { color:var(--azul); margin-right:12px; font-size:.8rem; }
   .listaDias h2 { margin:18px 0 6px; font-size:.9rem; color:var(--mut); }
   .listaDias h2.hoje { color:var(--azul); }
   .itemDia { border-left:3px solid; border-radius:8px; padding:8px 10px; margin-bottom:6px; font-size:.85rem; cursor:pointer; }
@@ -171,6 +174,8 @@
   <div class="form1"><button type="button" data-d="30">30 min</button><button type="button" data-d="40">40 min</button><button type="button" data-d="60">60 min</button><span id="fFimTxt" style="align-self:center;font-size:.85rem"></span></div>
   <label class="l">Sala ou link</label><select id="fSala"></select>
   <label class="l">Banca</label><div class="checks" id="fBanca"></div>
+  <label class="l">PDF do trabalho (fica público no site)</label>
+  <div class="form1" style="margin:0"><span id="fPdfNome" class="n" style="flex:1"></span><button type="button" id="fPdfEsc">Escolher PDF</button><button type="button" id="fPdfRem" class="perigo">Remover</button><input type="file" id="fPdfArq" accept="application/pdf,.pdf" class="oculto"></div>
   <div id="fAviso" class="aviso oculto"></div>
   <div class="acoes">
     <button type="button" id="fCard">Gerar card</button>
@@ -192,6 +197,7 @@
 <dialog id="dlgCard">
   <h3>Card de divulgação</h3>
   <canvas id="cvCard" width="1080" height="1080"></canvas>
+  <div class="form1" id="cdLinks"></div>
   <div class="form1"><label>Paleta <select id="cdPaleta"></select></label><button type="button" id="cdSortear">Sortear outra</button></div>
   <div class="acoes"><button type="button" id="cdFechar">Fechar</button><button type="button" id="cdLink">Copiar link</button><button type="button" id="cdZip">Atas e fichas (ZIP de PDFs)</button><button type="button" id="cdBaixar" class="pri">Baixar PNG</button></div>
 </dialog>
@@ -258,6 +264,7 @@ let sujo = false;
 let aba = "grade";
 let editDefesaId = null;
 let editAlunoId = null;
+let pdfAtual = "";
 let selecionados = new Set();
 let filtroProf = null;       // id do professor cuja agenda está sendo exibida (link ?prof=)
 
@@ -289,6 +296,17 @@ function defesasVisiveis() { return filtroProf ? data.defesas.filter(d => partic
 const URL_PUBLICA = "https://cser-uft.github.io/defesas/";
 function baseSite() { return location.protocol === "file:" ? URL_PUBLICA : new URL(".", location.href).href; }
 function idSeguro(id) { return String(id).replace(/[^A-Za-z0-9_]/g, "_"); }
+function salaDe(d) { return d.salaId ? data.salas.find(x => x.id === d.salaId) : null; }
+function rotuloLink(u) { return /meet\.google\.com|zoom\.us|teams\.microsoft/.test(u) ? "Entrar na videoconferência" : /google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps/.test(u) ? "Ver no mapa" : "Abrir link do local"; }
+function linksDefesa(d) {
+  const out = [], s = salaDe(d);
+  if (s && s.link) out.push([rotuloLink(s.link), s.link]);
+  if (d.pdf) out.push(["Trabalho (PDF)", d.pdf]);
+  return out;
+}
+function anchors(d, cls) {
+  return linksDefesa(d).map(([t, u]) => { const a = document.createElement("a"); a.href = u; a.target = "_blank"; a.rel = "noopener"; a.textContent = t; if (cls) a.className = cls; a.onclick = ev => ev.stopPropagation(); return a; });
+}
 function linkDefesa(d) { return baseSite() + "d/" + idSeguro(d.id) + ".html"; }
 function linkIcs(pid) { const pr = pid ? prof(pid) : null; return baseSite() + "ics/" + (pr ? profSlug(pr) : "todas") + ".ics"; }
 async function copiar(url, msg) {
@@ -454,6 +472,7 @@ function listaSemana(p, dias) {
       el.append(hr, b);
       if (d.titulo) { const t = document.createElement("div"); t.textContent = d.titulo; el.append(t); }
       const bn = document.createElement("div"); bn.className = "hr"; bn.textContent = "Banca: " + d.bancaIds.map(nomeProf).join(", "); el.append(bn);
+      const lk = anchors(d); if (lk.length) { const dv = document.createElement("div"); dv.append(...lk); el.append(dv); }
       el.onclick = () => editando ? abrirDefesa(d.id) : abrirCard(d);
       box.append(el);
     });
@@ -525,7 +544,7 @@ function cartao(x) {
   const fb = document.createElement("span"); fb.className = "fb"; fb.textContent = d.fases.length === 2 ? "T1+2" : d.fases[0] === "TCC2" ? "T2" : "T1";
   el.append(b, hr, ti, sl, fb);
   if (cf.length) { const ic = document.createElement("span"); ic.className = "al"; ic.textContent = "!"; ic.setAttribute("aria-label", "Conflito"); el.append(ic); }
-  el.title = (al ? al.nome : "?") + (d.titulo ? "\n" + d.titulo : "") + "\n" + rotuloFases(d.fases) + "\n" + d.inicio + " às " + fmtMin(fimMin(d)) + " (" + d.duracao + " min)\n" + nomeSala(d.salaId) + "\nBanca: " + d.bancaIds.map(id => (prof(id) || { nome: "?" }).nome).join(", ") + (cf.length ? "\n\nCONFLITO:\n" + [...new Set(cf)].join("\n") : "");
+  el.title = (al ? al.nome : "?") + (d.titulo ? "\n" + d.titulo : "") + "\n" + rotuloFases(d.fases) + "\n" + d.inicio + " às " + fmtMin(fimMin(d)) + " (" + d.duracao + " min)\n" + nomeSala(d.salaId) + (d.pdf ? "\nCom PDF do trabalho" : "") + "\nBanca: " + d.bancaIds.map(id => (prof(id) || { nome: "?" }).nome).join(", ") + (cf.length ? "\n\nCONFLITO:\n" + [...new Set(cf)].join("\n") : "");
   el.onclick = ev => { ev.stopPropagation(); if (!editando) abrirCard(d); };
   el.addEventListener("pointerdown", ev => iniciarArrasto(ev, d, el));
   return el;
@@ -692,9 +711,21 @@ function telaProfessores(p) {
 // Salas
 function telaSalas(p) {
   const t = document.createElement("table"); t.className = "lista"; p.append(t);
-  const cab = document.createElement("tr"); ["Sala ou link", editando ? "Ações" : ""].forEach(x => { if (x !== "" || editando) { const th = document.createElement("th"); th.textContent = x; cab.append(th); } }); t.append(cab);
+  const cab = document.createElement("tr"); ["Sala ou link", "Link do Meet ou do Google Maps", editando ? "Ações" : ""].forEach(x => { if (x !== "" || editando) { const th = document.createElement("th"); th.textContent = x; cab.append(th); } }); t.append(cab);
   data.salas.forEach(s => {
     const tr = document.createElement("tr"); const td = document.createElement("td"); td.textContent = s.nome; tr.append(td);
+    const tl = document.createElement("td");
+    if (editando) {
+      const i = document.createElement("input"); i.type = "url"; i.placeholder = "https://meet.google.com/... ou https://maps.app.goo.gl/..."; i.value = s.link || ""; i.style.cssText = "width:100%;height:30px;padding:0 8px;font:inherit;font-size:.84rem;border:1px solid var(--bord);border-radius:8px";
+      i.onchange = () => {
+        const v = i.value.trim();
+        if (v && !/^https:\/\//.test(v)) { $("status").textContent = "O link precisa começar com https://"; i.value = s.link || ""; return; }
+        if (v) s.link = v; else delete s.link;
+        reg("sala", "Link da sala «" + s.nome + "» " + (v ? "atualizado." : "removido.")); desenhar();
+      };
+      tl.append(i);
+    } else if (s.link) { const a = document.createElement("a"); a.href = s.link; a.target = "_blank"; a.rel = "noopener"; a.textContent = rotuloLink(s.link); tl.append(a); }
+    tr.append(tl);
     if (editando) {
       const ta = document.createElement("td");
       const r = document.createElement("button"); r.textContent = "Remover"; r.className = "perigo";
@@ -705,10 +736,16 @@ function telaSalas(p) {
   });
   if (editando) {
     const f = document.createElement("div"); f.className = "form1";
-    const i = document.createElement("input"); i.placeholder = "Nome da sala ou link";
+    const i = document.createElement("input"); i.placeholder = "Nome da sala";
+    const l = document.createElement("input"); l.type = "url"; l.placeholder = "Link do Meet ou do Maps (opcional)"; l.style.minWidth = "320px";
     const b = document.createElement("button"); b.textContent = "Adicionar sala";
-    b.onclick = () => { const n = i.value.trim(); if (!n) return; data.salas.push({ id: novoId("s"), nome: n, curto: n }); reg("sala", "Sala «" + n + "» cadastrada."); desenhar(); };
-    f.append(i, b); p.append(f);
+    b.onclick = () => {
+      const n = i.value.trim(), u = l.value.trim(); if (!n) return;
+      if (u && !/^https:\/\//.test(u)) { $("status").textContent = "O link precisa começar com https://"; return; }
+      const nova = { id: novoId("s"), nome: n, curto: n }; if (u) nova.link = u;
+      data.salas.push(nova); reg("sala", "Sala «" + n + "» cadastrada."); desenhar();
+    };
+    f.append(i, l, b); p.append(f);
   }
 }
 
@@ -756,6 +793,7 @@ function abrirDefesa(id, ds, ini) {
   const o0 = document.createElement("option"); o0.value = ""; o0.textContent = "A definir"; ss.append(o0);
   data.salas.forEach(s => { const o = document.createElement("option"); o.value = s.id; o.textContent = s.nome; ss.append(o); });
   $("tituloDefesa").textContent = d ? "Editar defesa" : "Nova defesa";
+  pdfAtual = d && d.pdf ? d.pdf : ""; mostrarPdf();
   $("fExcluir").classList.toggle("oculto", !d);
   $("fCard").classList.toggle("oculto", !d);
   $("fZip").classList.toggle("oculto", !d);
@@ -784,10 +822,46 @@ $("fAluno").onchange = () => { if (!editDefesaId) aplicarAluno(); };
 $("fIni").onchange = atualizarFim; $("fDur").oninput = atualizarFim;
 document.querySelectorAll("#dlgDefesa [data-d]").forEach(b => b.onclick = () => { $("fDur").value = b.dataset.d; atualizarFim(); });
 $("fCancelar").onclick = () => $("dlgDefesa").close();
+function mostrarPdf() {
+  $("fPdfNome").textContent = pdfAtual ? pdfAtual.replace("trabalhos/", "") : "Nenhum PDF";
+  $("fPdfRem").classList.toggle("oculto", !pdfAtual);
+}
+let pastaRepo = null;
+async function obterPasta() {
+  if (pastaRepo && (await pastaRepo.queryPermission({ mode: "readwrite" })) === "granted") return pastaRepo;
+  try { const db = await abrirIdb(); const h = await new Promise(res => { const q = db.transaction("h").objectStore("h").get("pasta"); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }); if (h && (await h.requestPermission({ mode: "readwrite" })) === "granted") { pastaRepo = h; return h; } } catch (e) {}
+  const h = await window.showDirectoryPicker({ id: "agendarepo", mode: "readwrite" });
+  try { await h.getFileHandle("index.html"); } catch (e) { throw new Error("escolha a pasta do repositório da agenda (a que tem o index.html)"); }
+  pastaRepo = h; try { const db = await abrirIdb(); db.transaction("h", "readwrite").objectStore("h").put(h, "pasta"); } catch (e) {}
+  return h;
+}
+$("fPdfEsc").onclick = () => $("fPdfArq").click();
+$("fPdfRem").onclick = () => { pdfAtual = ""; mostrarPdf(); };
+$("fPdfArq").onchange = async ev => {
+  const f = ev.target.files[0]; ev.target.value = ""; if (!f) return;
+  const al = aluno($("fAluno").value);
+  const quando = $("fData").value ? deInput($("fData").value) : fmtBR(hoje());
+  const nome = aaaammdd(quando) + "_" + slug(al ? al.nome : "trabalho") + ".pdf";
+  const av = $("fAviso");
+  if (f.size > 40 * 1024 * 1024) { av.textContent = "PDF com mais de 40 MB; reduza o arquivo antes (o GitHub recusa arquivos muito grandes)."; av.classList.remove("oculto"); return; }
+  if ("showDirectoryPicker" in window) {
+    try {
+      const dir = await (await obterPasta()).getDirectoryHandle("trabalhos", { create: true });
+      const w = await (await dir.getFileHandle(nome, { create: true })).createWritable(); await w.write(f); await w.close();
+      pdfAtual = "trabalhos/" + nome; mostrarPdf();
+      av.textContent = "PDF copiado para trabalhos/" + nome + ". Grave a defesa e rode o publicar.sh para enviá-lo."; av.classList.remove("oculto");
+    } catch (e) { if (e.name !== "AbortError") { av.textContent = "Não foi possível gravar o PDF: " + e.message; av.classList.remove("oculto"); } }
+  } else {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = nome; a.click();
+    pdfAtual = "trabalhos/" + nome; mostrarPdf();
+    av.textContent = "Este navegador não grava em pastas: mova o arquivo baixado " + nome + " para a pasta trabalhos/ do repositório."; av.classList.remove("oculto");
+  }
+};
 $("btnNova").onclick = () => abrirDefesa(null, fmtBR(semana), "09:00");
 $("fOk").onclick = () => {
   const fases = []; if ($("fT1").checked) fases.push("TCC1"); if ($("fT2").checked) fases.push("TCC2");
   const n = { id: editDefesaId || novoId("d"), alunoId: $("fAluno").value, fases: fases, titulo: $("fTitulo").value.trim(), data: $("fData").value ? deInput($("fData").value) : "", inicio: $("fIni").value, duracao: parseInt($("fDur").value, 10) || 0, salaId: $("fSala").value || null, bancaIds: [...$("fBanca").querySelectorAll("input:checked")].map(c => c.value) };
+  if (pdfAtual) n.pdf = pdfAtual;
   const av = $("fAviso"); const erro = txt => { av.textContent = txt; av.classList.remove("oculto"); };
   if (!n.alunoId || !fases.length || !n.data || n.duracao < 15) return erro("Informe aluno, ao menos uma fase, data e duração de pelo menos 15 minutos.");
   const dia = parseBR(n.data).getDay(); if (dia < 1 || dia > 5) return erro("Escolha um dia de segunda a sexta.");
@@ -908,6 +982,7 @@ function abrirCard(d) {
   const sel = $("cdPaleta");
   if (!sel.options.length) Object.keys(PALETAS).forEach(n => { const o = document.createElement("option"); o.value = n; o.textContent = n; sel.append(o); });
   sel.value = paletaAleatoria(null);
+  const cl = $("cdLinks"); cl.textContent = ""; cl.append(...anchors(d, "bt")); cl.classList.toggle("oculto", !cl.childNodes.length);
   redesenharCard(); $("dlgCard").showModal();
 }
 $("cdPaleta").onchange = redesenharCard;
@@ -1283,7 +1358,8 @@ function linhaImp(d) {
   return {
     data: d.data, dia: DIAS_SEM[dt.getDay()], ini: d.inicio, fim: fmtMin(fimMin(d)), dur: d.duracao + " min",
     fase: rotuloFases(d.fases), aluno: al.nome, titulo: d.titulo || "", orient: o ? o.nome : "", coorient: co ? co.nome : "",
-    banca: banca.join(", "), todos: d.bancaIds.map(nomeProf).join(", "), sala: nomeSala(d.salaId)
+    banca: banca.join(", "), todos: d.bancaIds.map(nomeProf).join(", "), sala: nomeSala(d.salaId),
+    link: (salaDe(d) || {}).link || "", pdf: d.pdf ? baseSite() + d.pdf : ""
   };
 }
 function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
@@ -1322,9 +1398,9 @@ $("impOk").onclick = () => {
 };
 $("impZip").onclick = () => gerarZip(defesasImp(), $("impEsc").value);
 $("impCsv").onclick = () => {
-  const cab = ["Data", "Dia", "Início", "Fim", "Duração (min)", "Fase", "Aluno", "Título", "Orientador", "Coorientador", "Demais membros da banca", "Banca completa", "Sala"];
+  const cab = ["Data", "Dia", "Início", "Fim", "Duração (min)", "Fase", "Aluno", "Título", "Orientador", "Coorientador", "Demais membros da banca", "Banca completa", "Sala", "Link do local", "PDF do trabalho"];
   const q = t => '"' + String(t).replace(/"/g, '""') + '"';
-  const linhas = defesasImp().map(linhaImp).map(r => [r.data, r.dia, r.ini, r.fim, parseInt(r.dur), r.fase, r.aluno, r.titulo, r.orient, r.coorient, r.banca, r.todos, r.sala]);
+  const linhas = defesasImp().map(linhaImp).map(r => [r.data, r.dia, r.ini, r.fim, parseInt(r.dur), r.fase, r.aluno, r.titulo, r.orient, r.coorient, r.banca, r.todos, r.sala, r.link, r.pdf]);
   const csv = "﻿" + [cab].concat(linhas).map(l => l.map(q).join(";")).join("\r\n");
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
   a.download = "defesas_tcc.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);

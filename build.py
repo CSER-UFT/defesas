@@ -9,6 +9,7 @@ Gera, além dos arquivos da página:
   ics/<professor>.ics  calendário assinável com as defesas de cada professor
   ics/todas.ics        calendário com todas as defesas
   d/<id>.html          link curto de cada defesa, com prévia (título e data) para WhatsApp e afins
+  trabalhos/*.pdf      PDFs dos trabalhos referenciados por alguma defesa
 """
 import datetime as dt
 import html
@@ -45,7 +46,7 @@ def quando(d):
     return ini, ini + dt.timedelta(minutes=int(d["duracao"]))
 
 
-def verificar(a):
+def verificar(a, base="."):
     erros = []
     if a.get("formato") != "agendatcc":
         erros.append("o arquivo não é uma agenda (campo formato)")
@@ -79,6 +80,17 @@ def verificar(a):
             erros.append("defesa %s: banca vazia ou com professor inexistente" % nome)
         if d.get("salaId") and d["salaId"] not in salas:
             erros.append("defesa %s: sala inexistente" % nome)
+        pdf = d.get("pdf")
+        if pdf:
+            if not re.fullmatch(r"trabalhos/[A-Za-z0-9_]+\.pdf", pdf):
+                erros.append("defesa %s: nome de PDF inválido (%s)" % (nome, pdf))
+            elif not os.path.isfile(os.path.join(base, pdf)):
+                erros.append("defesa %s: PDF não encontrado em %s" % (nome, pdf))
+            elif os.path.getsize(os.path.join(base, pdf)) > 45 * 1024 * 1024:
+                erros.append("defesa %s: %s passa de 45 MB" % (nome, pdf))
+    for x in a.get("salas", []):
+        if x.get("link") and not x["link"].startswith("https://"):
+            erros.append("sala %s: o link precisa começar com https://" % x["nome"])
     return erros
 
 
@@ -102,7 +114,8 @@ class Agenda:
 
     def info(self, d):
         al = self.aluno.get(d["alunoId"], {})
-        sala = self.sala.get(d.get("salaId") or "", {}).get("nome", "A definir")
+        s = self.sala.get(d.get("salaId") or "", {})
+        sala = s.get("nome", "A definir")
         return {
             "aluno": al.get("nome", "?"),
             "titulo": d.get("titulo") or "",
@@ -110,6 +123,9 @@ class Agenda:
             "coorient": self.nome_prof(al["coorientadorId"]) if al.get("coorientadorId") else "",
             "banca": ", ".join(self.nome_prof(b) for b in d["bancaIds"]),
             "sala": sala,
+            "link": s.get("link", ""),
+            "remoto": bool(re.search(r"meet\.google\.com|zoom\.us|teams\.microsoft", s.get("link", ""))),
+            "pdf": URL + d["pdf"] if d.get("pdf") else "",
         }
 
 
@@ -145,11 +161,16 @@ def ics(ag, defesas, nome_cal, agora):
         desc.append("Orientador: " + i["orient"])
         if i["coorient"]:
             desc.append("Coorientador: " + i["coorient"])
-        desc += ["Banca: " + i["banca"], "Local: " + i["sala"], URL + "d/" + id_seguro(d["id"]) + ".html"]
+        desc += ["Banca: " + i["banca"], "Local: " + i["sala"]]
+        if i["link"]:
+            desc.append(("Videoconferência: " if i["remoto"] else "Mapa: ") + i["link"])
+        if i["pdf"]:
+            desc.append("Trabalho (PDF): " + i["pdf"])
+        desc.append(URL + "d/" + id_seguro(d["id"]) + ".html")
         L += ["BEGIN:VEVENT", "UID:defesa-" + id_seguro(d["id"]) + "@cser-uft.github.io", "DTSTAMP:" + fmt(agora),
               "DTSTART:" + fmt(ini), "DTEND:" + fmt(fim),
               "SUMMARY:" + esc_ics("Defesa de " + ag.fase(d) + ": " + i["aluno"]),
-              "LOCATION:" + esc_ics(i["sala"]), "DESCRIPTION:" + esc_ics("\n".join(desc)),
+              "LOCATION:" + esc_ics(i["link"] if i["remoto"] else i["sala"]), "DESCRIPTION:" + esc_ics("\n".join(desc)),
               "URL:" + URL + "d/" + id_seguro(d["id"]) + ".html", "END:VEVENT"]
     L.append("END:VCALENDAR")
     return "\r\n".join(dobrar(x) for x in L) + "\r\n"
@@ -175,16 +196,18 @@ def pagina_defesa(ag, d):
 <meta http-equiv="refresh" content="0; url={r}">
 <script>location.replace({rj});</script>
 </head><body style="font-family:system-ui,sans-serif;padding:24px">
-<p><b>{t}</b><br>{d}</p><p><a href="{r}">Abrir na agenda</a></p>
+<p><b>{t}</b><br>{d}</p><p><a href="{r}">Abrir na agenda</a>{x}</p>
 </body></html>
-""".format(t=e(titulo), d=e(desc), u=e(URL + "d/" + id_seguro(d["id"]) + ".html"), r=e(destino), rj=json.dumps(destino))
+""".format(t=e(titulo), d=e(desc), u=e(URL + "d/" + id_seguro(d["id"]) + ".html"), r=e(destino), rj=json.dumps(destino),
+               x="".join(' · <a href="%s">%s</a>' % (e(u), e(t)) for t, u in (
+                   (("Entrar na videoconferência" if i["remoto"] else "Ver no mapa"), i["link"]), ("Trabalho (PDF)", i["pdf"])) if u))
 
 
 def main():
     base = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(base, "agenda.json"), encoding="utf-8") as f:
         a = json.load(f)
-    erros = verificar(a)
+    erros = verificar(a, base)
     if erros:
         print("agenda.json com problemas:")
         for x in erros:
@@ -206,6 +229,11 @@ def main():
     for arq in ARQUIVOS:
         if arq != "agenda.json":
             shutil.copy(os.path.join(base, arq), site)
+    usados = {d["pdf"] for d in a["defesas"] if d.get("pdf")}
+    if usados:
+        os.makedirs(os.path.join(site, "trabalhos"))
+        for pdf in usados:
+            shutil.copy(os.path.join(base, pdf), os.path.join(site, pdf))
     with open(os.path.join(site, "agenda.json"), "w", encoding="utf-8") as f:
         json.dump(a, f, ensure_ascii=False, indent=1)
 

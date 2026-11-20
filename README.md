@@ -17,6 +17,8 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda 
 - Impressão em planilha e exportação em CSV.
 - Calendário assinável: o botão **Calendário** copia o endereço do `.ics` (de um professor, ou de todas as defesas) para assinar no Google Agenda (Outras agendas, +, Do URL), Outlook ou celular. Os calendários são gerados a cada publicação e o aplicativo de agenda atualiza sozinho.
 - Link de uma defesa: no card de divulgação, **Copiar link** gera `d/<id>.html`, que mostra aluno, data e local na prévia do WhatsApp e abre a agenda com o card da defesa.
+- Link do local: na aba Salas, cada sala pode ter um link do Meet (sala Remoto) ou do Google Maps (salas físicas). Ele aparece no card da defesa, na lista do celular, no link da defesa e no calendário (o Meet vai como local do evento).
+- PDF do trabalho: no diálogo da defesa, **Escolher PDF** copia o arquivo para `trabalhos/AAAAMMDD_nome_do_aluno.pdf` na pasta do repositório (no primeiro uso o navegador pede para escolher essa pasta). O `publicar.sh` envia o PDF junto, e ele fica **público** no site. Mesmo apagado depois, o arquivo continua no histórico do Git.
 - No celular, a semana aparece como lista por dia, com os horários livres do professor filtrado.
 - Agenda de um professor por link: escolha **Agenda de ...** na tela e clique em **Copiar link**. O link tem a forma `?prof=tiago_almeida` (nome curto do professor), abre só as defesas dele com os horários livres em verde, e a impressão, o CSV e o ZIP passam a seguir o mesmo filtro.
 

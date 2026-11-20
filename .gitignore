@@ -1,6 +1,7 @@
 # Arquivos gerados e dados de trabalho ficam fora do repositório
 *.zip
 *.pdf
+!trabalhos/*.pdf
 *.png
 # Somente a cópia pública da agenda (sem o log) é publicada
 *.json
