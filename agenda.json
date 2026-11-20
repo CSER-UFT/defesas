@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795218921670,
+  "salvoEm": 1795219111849,
   "config": {
     "titulo": "AGENDA DE DEFESAS DE TCC",
     "subtitulo": "",
@@ -206,7 +206,8 @@
         "p3",
         "p4",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261130_daniel_barbosa_de_assis_costa.pdf"
     },
     {
       "id": "dmwmxph7ozca",
@@ -223,7 +224,8 @@
         "p4",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261130_pablo_pereira_brito.pdf"
     },
     {
       "id": "dmwmxseve18b",
@@ -241,7 +243,8 @@
         "pmwnn3nfbzdt",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261130_rafael_soares_lopes_de_souza.pdf"
     },
     {
       "id": "dmwmxt0dp2fm",
@@ -275,7 +278,8 @@
         "pmwnn3nfbzdt",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261130_vinicius_wanderley_arruda.pdf"
     },
     {
       "id": "dmwnni6gb8gc",
@@ -427,6 +431,26 @@
       "ts": 1795212930789,
       "tipo": "defesa",
       "texto": "Defesa de «Neci Mendes Fialho» movida de 02/12/2026 08:00 para 03/12/2026 08:00."
+    },
+    {
+      "ts": 1795219082130,
+      "tipo": "defesa",
+      "texto": "Defesa de «Daniel Barbosa de Assis Costa» (TCC2) em 30/11/2026 às 08:45 por 40 min."
+    },
+    {
+      "ts": 1795219094497,
+      "tipo": "defesa",
+      "texto": "Defesa de «Pablo Pereira Brito» (TCC2) em 30/11/2026 às 10:15 por 40 min."
+    },
+    {
+      "ts": 1795219101839,
+      "tipo": "defesa",
+      "texto": "Defesa de «Rafael Soares Lopes de Souza» (TCC1 e TCC2) em 30/11/2026 às 14:00 por 40 min."
+    },
+    {
+      "ts": 1795219111248,
+      "tipo": "defesa",
+      "texto": "Defesa de «Vinícius Wanderley Arruda» (TCC2) em 30/11/2026 às 14:45 por 40 min."
     }
   ]
 }
