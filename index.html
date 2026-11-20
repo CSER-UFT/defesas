@@ -82,10 +82,13 @@
   .card em { display:block; font-style:normal; color:var(--ink); opacity:.85; }
   .card .fb { position:absolute; top:3px; right:5px; font-size:.62rem; font-weight:600; padding:0 5px; border-radius:999px; background:#ffffffb0; }
   .card.curto em, .card.curto .sl { display:none !important; }
-  .f1 { background:#E8F0FE; border-color:#2F6FEB; } .f1 .fb { color:#1B4FB8; }
-  .f2 { background:#FFF1E0; border-color:#D9822B; } .f2 .fb { color:#9A5712; }
-  .f12 { background:#F0E9FB; border-color:#7A4FD1; } .f12 .fb { color:#5A33A8; }
-  .card.conflito, .f1.conflito, .f2.conflito, .f12.conflito { background:#FDE8E8; border-color:#D64545; box-shadow:0 0 0 1px #D64545 inset; }
+  .nG { background:#E8F0FE; border-color:#2F6FEB; } .nG .fb { color:#1B4FB8; }
+  .nM { background:#FFF1E0; border-color:#D9822B; } .nM .fb { color:#9A5712; }
+  .nD { background:#F0E9FB; border-color:#7A4FD1; } .nD .fb { color:#5A33A8; }
+  .et1 { border-left-style:dashed; outline:1px dashed; outline-offset:-1px; }
+  .nG.et1 { outline-color:#2F6FEB; } .nM.et1 { outline-color:#D9822B; } .nD.et1 { outline-color:#7A4FD1; }
+  .legenda i.tr { background:none !important; border:1.5px dashed var(--mut); width:14px; height:9px; border-radius:2px; }
+  .card.conflito, .nG.conflito, .nM.conflito, .nD.conflito { background:#FDE8E8; border-color:#D64545; box-shadow:0 0 0 1px #D64545 inset; }
   .card.conflito .fb { color:#B42318; }
   .card .al { position:absolute; bottom:3px; right:5px; width:15px; height:15px; border-radius:50%; background:#D64545; color:#fff; font-size:.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; }
   table.lista { border-collapse:collapse; width:100%; background:#fff; font-size:.88rem; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
@@ -165,8 +168,8 @@
 <dialog id="dlgDefesa">
   <h3 id="tituloDefesa">Defesa</h3>
   <label class="l">Aluno</label><select id="fAluno"></select>
-  <label class="l">Fases defendidas</label>
-  <div class="checks"><label><input type="checkbox" id="fT1"> TCC1</label><label><input type="checkbox" id="fT2"> TCC2</label></div>
+  <label class="l">Etapa</label>
+  <div class="checks"><label><input type="checkbox" id="fT1"> <span id="fT1r">TCC1</span></label><label><input type="checkbox" id="fT2"> <span id="fT2r">TCC2</span></label></div>
   <label class="l">Título do trabalho</label><input id="fTitulo" placeholder="Título da monografia">
   <div class="linha">
     <div><label class="l">Data</label><input type="date" id="fData"></div>
@@ -207,10 +210,11 @@
 <dialog id="dlgAluno">
   <h3 id="tituloAluno">Aluno</h3>
   <label class="l">Nome</label><input id="aNome">
+  <label class="l">Nível</label><select id="aNivel"><option value="grad">Graduação (TCC)</option><option value="mestrado">Mestrado</option><option value="doutorado">Doutorado</option></select>
   <label class="l">Orientador</label><select id="aOrient"></select>
   <label class="l">Coorientador (opcional)</label><select id="aCoorient"></select>
   <label class="l">Fase</label>
-  <select id="aFase"><option value="">Automática (pela data das defesas)</option><option value="TCC1">Forçar TCC1</option><option value="TCC2">Forçar TCC2</option></select>
+  <select id="aFase"></select>
   <div class="acoes">
     <button type="button" id="aConcluir">Marcar como concluído</button>
     <button type="button" id="aRemover" class="perigo">Remover</button>
@@ -286,7 +290,21 @@ function somaDias(dt, n) { const r = new Date(dt); r.setDate(r.getDate() + n); r
 function novoId(p) { return p + Date.now().toString(36) + Math.floor(Math.random() * 46656).toString(36); }
 function fimMin(d) { return toMin(d.inicio) + d.duracao; }
 function sobrepoe(i1, f1, i2, f2) { return i1 < f2 && i2 < f1; }
-function rotuloFases(f) { return f.length === 2 ? "TCC1 e TCC2" : f[0]; }
+const NIVEIS = { grad: "Graduação", mestrado: "Mestrado", doutorado: "Doutorado" };
+function nivel(a) { return (a && a.nivel) || "grad"; }
+function ehPos(a) { return nivel(a) !== "grad"; }
+function etapas(nv) { return nv === "grad" ? ["TCC1", "TCC2"] : ["QUAL", "DEF"]; }
+function nomeEtapa(f, nv) {
+  if (f === "QUAL" || f === "DEF") return (f === "QUAL" ? "Qualificação" : "Defesa") + (nv && nv !== "grad" ? " de " + NIVEIS[nv].toLowerCase() : "");
+  return f;
+}
+function rotuloFases(f, nv) { return f.length === 2 ? "TCC1 e TCC2" : nomeEtapa(f[0], nv); }
+function rotuloDef(d) { return rotuloFases(d.fases, nivel(aluno(d.alunoId))); }
+function classeDef(d) {
+  const nv = nivel(aluno(d.alunoId));
+  return ({ grad: "nG", mestrado: "nM", doutorado: "nD" })[nv] + (d.fases.length === 1 && (d.fases[0] === "TCC1" || d.fases[0] === "QUAL") ? " et1" : "");
+}
+function seloDef(d) { return d.fases.length === 2 ? "T1+2" : ({ TCC1: "T1", TCC2: "T2", QUAL: "Q", DEF: "D" })[d.fases[0]]; }
 function prof(id) { return data.professores.find(x => x.id === id); }
 function nomeProf(id) { const p = prof(id); return p ? p.curto : "?"; }
 function nomeSala(id) { const s = data.salas.find(x => x.id === id); return s ? s.curto : "A definir"; }
@@ -350,9 +368,10 @@ function estadoAluno(a) {
   const h = hoje();
   const ds = defesasDoAluno(a.id);
   const passou = d => parseBR(d.data) < h;
-  if (ds.some(d => d.fases.includes("TCC2") && passou(d))) return { fase: "concluído", manual: false };
-  if (a.faseManual) return { fase: a.faseManual, manual: true };
-  return { fase: ds.some(d => d.fases.includes("TCC1") && passou(d)) ? "TCC2" : "TCC1", manual: false };
+  const [e1, e2] = etapas(nivel(a));
+  if (ds.some(d => d.fases.includes(e2) && passou(d))) return { fase: "concluído", manual: false };
+  if (a.faseManual && [e1, e2].includes(a.faseManual)) return { fase: a.faseManual, manual: true };
+  return { fase: ds.some(d => d.fases.includes(e1) && passou(d)) ? e2 : e1, manual: false };
 }
 function alunosAtivos() { return porNome(data.alunos.filter(a => estadoAluno(a).fase !== "concluído")); }
 function proximaDefesa(a) { const h = hoje(); return defesasDoAluno(a.id).find(d => parseBR(d.data) >= h); }
@@ -403,7 +422,8 @@ function telaGrade(p) {
   const rot = document.createElement("strong"); rot.id = "rotSemana";
   const lg = document.createElement("div"); lg.className = "legenda";
   const item = (cor, txt) => { const sp = document.createElement("span"); const i = document.createElement("i"); i.style.background = cor; sp.append(i, txt); lg.append(sp); };
-  item("#2F6FEB", "TCC1"); item("#D9822B", "TCC2"); item("#7A4FD1", "TCC1 e 2"); item("#D64545", "Conflito");
+  item("#2F6FEB", "TCC"); item("#D9822B", "Mestrado"); item("#7A4FD1", "Doutorado"); item("#D64545", "Conflito");
+  { const sp = document.createElement("span"); const i = document.createElement("i"); i.className = "tr"; sp.append(i, "TCC1 ou qualificação"); sp.title = "Selos: T1, T2, T1+2 (TCC), Q (qualificação), D (defesa)"; lg.append(sp); }
   if (selecionados.size) { item("#2E9E6B", "Livre para a banca"); item("#9AA3AF", "Ocupado"); }
   const vis = document.createElement("div"); vis.className = "form1"; vis.style.margin = "0";
   const sv = document.createElement("select"); sv.title = "Ver a agenda de um professor"; sv.setAttribute("aria-label", "Ver a agenda de");
@@ -473,8 +493,8 @@ function listaSemana(p, dias) {
     lista.forEach(d => {
       const al = aluno(d.alunoId);
       const el = document.createElement("div");
-      el.className = "itemDia " + (d.fases.length === 2 ? "f12" : d.fases[0] === "TCC2" ? "f2" : "f1") + (conflitos(d).length ? " conflito" : "");
-      const hr = document.createElement("div"); hr.className = "hr"; hr.textContent = d.inicio + " às " + fmtMin(fimMin(d)) + " · " + rotuloFases(d.fases) + " · " + nomeSala(d.salaId);
+      el.className = "itemDia " + classeDef(d) + (conflitos(d).length ? " conflito" : "");
+      const hr = document.createElement("div"); hr.className = "hr"; hr.textContent = d.inicio + " às " + fmtMin(fimMin(d)) + " · " + rotuloDef(d) + " · " + nomeSala(d.salaId);
       const b = document.createElement("b"); b.textContent = al ? al.nome : "?";
       el.append(hr, b);
       if (d.titulo) { const t = document.createElement("div"); t.textContent = d.titulo; el.append(t); }
@@ -536,7 +556,7 @@ function desenharSeg(col, s) {
 function cartao(x) {
   const d = x.d, al = aluno(d.alunoId);
   const el = document.createElement("div");
-  el.className = "card " + (d.fases.length === 2 ? "f12" : d.fases[0] === "TCC2" ? "f2" : "f1");
+  el.className = "card " + classeDef(d);
   const cf = conflitos(d); if (cf.length) el.classList.add("conflito");
   const alt = Math.max(d.duracao / 60 * HP, 18);
   el.style.top = ((toMin(d.inicio) - DIA_INI) / 60 * HP) + "px";
@@ -548,10 +568,10 @@ function cartao(x) {
   const hr = document.createElement("span"); hr.className = "hr"; hr.textContent = d.inicio + " às " + fmtMin(fimMin(d));
   const ti = document.createElement("em"); ti.textContent = d.titulo ? d.titulo : ""; ti.style.display = d.titulo ? "block" : "none";
   const sl = document.createElement("span"); sl.className = "sl"; sl.textContent = nomeSala(d.salaId);
-  const fb = document.createElement("span"); fb.className = "fb"; fb.textContent = d.fases.length === 2 ? "T1+2" : d.fases[0] === "TCC2" ? "T2" : "T1";
+  const fb = document.createElement("span"); fb.className = "fb"; fb.textContent = seloDef(d);
   el.append(b, hr, ti, sl, fb);
   if (cf.length) { const ic = document.createElement("span"); ic.className = "al"; ic.textContent = "!"; ic.setAttribute("aria-label", "Conflito"); el.append(ic); }
-  el.title = (al ? al.nome : "?") + (d.titulo ? "\n" + d.titulo : "") + "\n" + rotuloFases(d.fases) + "\n" + d.inicio + " às " + fmtMin(fimMin(d)) + " (" + d.duracao + " min)\n" + nomeSala(d.salaId) + (d.pdf ? "\nCom PDF do trabalho" : "") + "\nBanca: " + d.bancaIds.map(id => (prof(id) || { nome: "?" }).nome).join(", ") + (cf.length ? "\n\nCONFLITO:\n" + [...new Set(cf)].join("\n") : "");
+  el.title = (al ? al.nome : "?") + (d.titulo ? "\n" + d.titulo : "") + "\n" + rotuloDef(d) + "\n" + d.inicio + " às " + fmtMin(fimMin(d)) + " (" + d.duracao + " min)\n" + nomeSala(d.salaId) + (d.pdf ? "\nCom PDF do trabalho" : "") + "\nBanca: " + d.bancaIds.map(id => (prof(id) || { nome: "?" }).nome).join(", ") + (cf.length ? "\n\nCONFLITO:\n" + [...new Set(cf)].join("\n") : "");
   el.onclick = ev => { ev.stopPropagation(); if (!editando) abrirCard(d); };
   el.addEventListener("pointerdown", ev => iniciarArrasto(ev, d, el));
   return el;
@@ -613,14 +633,14 @@ function telaAlunos(p) {
   if (editando) { const b = document.createElement("button"); b.textContent = "Novo aluno"; b.onclick = () => abrirAluno(null); p.append(b); }
   const t = document.createElement("table"); t.className = "lista"; p.append(t);
   const cab = document.createElement("tr");
-  ["Aluno", "Orientador", "Coorientador", "Fase atual", "Título do trabalho", "Próxima defesa", editando ? "Ações" : ""].forEach(x => { if (x !== "" || editando) { const th = document.createElement("th"); th.textContent = x; cab.append(th); } });
+  ["Aluno", "Nível", "Orientador", "Coorientador", "Fase atual", "Título do trabalho", "Próxima defesa", editando ? "Ações" : ""].forEach(x => { if (x !== "" || editando) { const th = document.createElement("th"); th.textContent = x; cab.append(th); } });
   t.append(cab);
   alunosAtivos().forEach(a => {
     const e = estadoAluno(a), nd = proximaDefesa(a);
     const tr = document.createElement("tr");
     const cel = txt => { const td = document.createElement("td"); td.textContent = txt; tr.append(td); return td; };
-    cel(a.nome); cel(nomeProf(a.orientadorId)); cel(a.coorientadorId ? nomeProf(a.coorientadorId) : ""); cel(e.fase + (e.manual ? " (manual)" : "")); cel(tituloSugerido(a.id));
-    cel(nd ? nd.data + " " + nd.inicio + " (" + rotuloFases(nd.fases) + ")" : "Não agendado");
+    cel(a.nome); cel(NIVEIS[nivel(a)]); cel(nomeProf(a.orientadorId)); cel(a.coorientadorId ? nomeProf(a.coorientadorId) : ""); cel(nomeEtapa(e.fase, nivel(a)) + (e.manual ? " (manual)" : "")); cel(tituloSugerido(a.id));
+    cel(nd ? nd.data + " " + nd.inicio + " (" + rotuloDef(nd) + ")" : "Não agendado");
     if (editando) { const td = document.createElement("td"); const b = document.createElement("button"); b.textContent = "Editar"; b.onclick = () => abrirAluno(a.id); td.append(b); tr.append(td); }
     t.append(tr);
   });
@@ -638,16 +658,24 @@ function abrirAluno(id) {
   co.value = a && a.coorientadorId ? a.coorientadorId : "";
   $("tituloAluno").textContent = a ? "Editar aluno" : "Novo aluno";
   $("aNome").value = a ? a.nome : ""; sel.value = a ? a.orientadorId : (data.professores[0] ? data.professores[0].id : "");
-  $("aFase").value = a && a.faseManual ? a.faseManual : "";
+  $("aNivel").value = nivel(a); opcoesFase();
+  $("aFase").value = a && a.faseManual && etapas(nivel(a)).includes(a.faseManual) ? a.faseManual : "";
   $("aConcluir").classList.toggle("oculto", !a); $("aRemover").classList.toggle("oculto", !a);
   $("dlgAluno").showModal();
 }
+function opcoesFase() {
+  const nv = $("aNivel").value, sel = $("aFase"), atual = sel.value; sel.textContent = "";
+  [["", "Automática (pela data das defesas)"], ...etapas(nv).map(e => [e, "Forçar " + nomeEtapa(e, nv).toLowerCase().replace("tcc", "TCC")])].forEach(([v, t]) => { const o = document.createElement("option"); o.value = v; o.textContent = t; sel.append(o); });
+  sel.value = etapas(nv).includes(atual) ? atual : "";
+}
+$("aNivel").onchange = opcoesFase;
+function aplicarNivel(a) { const v = $("aNivel").value; if (v === "grad") delete a.nivel; else a.nivel = v; }
 $("aCancelar").onclick = () => $("dlgAluno").close();
 $("aOk").onclick = () => {
   const nome = $("aNome").value.trim(); if (!nome) return;
   if ($("aCoorient").value && $("aCoorient").value === $("aOrient").value) { $("status").textContent = "O coorientador deve ser diferente do orientador."; return; }
-  if (editAlunoId) { const a = aluno(editAlunoId); a.nome = nome; a.orientadorId = $("aOrient").value; a.coorientadorId = $("aCoorient").value || null; a.faseManual = $("aFase").value || null; reg("aluno", "Aluno «" + nome + "» atualizado."); }
-  else { data.alunos.push({ id: novoId("a"), nome: nome, orientadorId: $("aOrient").value, coorientadorId: $("aCoorient").value || null, faseManual: $("aFase").value || null, concluido: false }); reg("aluno", "Aluno «" + nome + "» cadastrado."); }
+  if (editAlunoId) { const a = aluno(editAlunoId); a.nome = nome; a.orientadorId = $("aOrient").value; a.coorientadorId = $("aCoorient").value || null; a.faseManual = $("aFase").value || null; aplicarNivel(a); reg("aluno", "Aluno «" + nome + "» atualizado."); }
+  else { const novo = { id: novoId("a"), nome: nome, orientadorId: $("aOrient").value, coorientadorId: $("aCoorient").value || null, faseManual: $("aFase").value || null, concluido: false }; aplicarNivel(novo); data.alunos.push(novo); reg("aluno", "Aluno «" + nome + "» cadastrado."); }
   $("dlgAluno").close(); desenhar();
 };
 $("aConcluir").onclick = () => { const a = aluno(editAlunoId); if (!confirm("Marcar " + a.nome + " como concluído? Ele deixa de aparecer na página.")) return; a.concluido = true; reg("aluno", "Aluno «" + a.nome + "» marcado como concluído."); $("dlgAluno").close(); desenhar(); };
@@ -805,7 +833,7 @@ function abrirDefesa(id, ds, ini) {
   $("fCard").classList.toggle("oculto", !d);
   $("fZip").classList.toggle("oculto", !d);
   if (d) {
-    sa.value = d.alunoId; $("fT1").checked = d.fases.includes("TCC1"); $("fT2").checked = d.fases.includes("TCC2");
+    sa.value = d.alunoId; rotularEtapas(); const [e1, e2] = etapas(nivel(aluno(d.alunoId))); $("fT1").checked = d.fases.includes(e1); $("fT2").checked = d.fases.includes(e2);
     $("fData").value = paraInput(d.data); $("fIni").value = d.inicio; $("fDur").value = d.duracao; ss.value = d.salaId || "";
     $("fTitulo").value = d.titulo || "";
     desenharBanca(d.bancaIds);
@@ -821,11 +849,19 @@ function abrirDefesa(id, ds, ini) {
 function aplicarAluno() {
   const a = aluno($("fAluno").value); if (!a) return;
   const e = estadoAluno(a);
-  $("fT1").checked = e.fase !== "TCC2"; $("fT2").checked = e.fase === "TCC2";
+  rotularEtapas(); const e2 = etapas(nivel(a))[1];
+  $("fT1").checked = e.fase !== e2; $("fT2").checked = e.fase === e2;
   desenharBanca(bancaSugerida(a.id));
   $("fTitulo").value = tituloSugerido(a.id);
 }
-$("fAluno").onchange = () => { if (!editDefesaId) aplicarAluno(); };
+$("fAluno").onchange = () => { if (!editDefesaId) aplicarAluno(); else rotularEtapas(); };
+function rotularEtapas() {
+  const a = aluno($("fAluno").value), pos = ehPos(a);
+  $("fT1r").textContent = pos ? "Qualificação" : "TCC1"; $("fT2r").textContent = pos ? "Defesa" : "TCC2";
+  if (pos && $("fT1").checked && $("fT2").checked) $("fT2").checked = false;
+  $("fZip").classList.toggle("oculto", pos || !editDefesaId);
+}
+["fT1", "fT2"].forEach((id, k) => $(id).addEventListener("change", () => { if ($(id).checked && ehPos(aluno($("fAluno").value))) $(k ? "fT1" : "fT2").checked = false; }));
 $("fIni").onchange = atualizarFim; $("fDur").oninput = atualizarFim;
 document.querySelectorAll("#dlgDefesa [data-d]").forEach(b => b.onclick = () => { $("fDur").value = b.dataset.d; atualizarFim(); });
 $("fCancelar").onclick = () => $("dlgDefesa").close();
@@ -875,18 +911,20 @@ $("fPdfArq").onchange = async ev => {
 };
 $("btnNova").onclick = () => abrirDefesa(null, fmtBR(semana), "09:00");
 $("fOk").onclick = () => {
-  const fases = []; if ($("fT1").checked) fases.push("TCC1"); if ($("fT2").checked) fases.push("TCC2");
+  const [et1, et2] = etapas(nivel(aluno($("fAluno").value)));
+  const fases = []; if ($("fT1").checked) fases.push(et1); if ($("fT2").checked) fases.push(et2);
   const n = { id: editDefesaId || novoId("d"), alunoId: $("fAluno").value, fases: fases, titulo: $("fTitulo").value.trim(), data: $("fData").value ? deInput($("fData").value) : "", inicio: $("fIni").value, duracao: parseInt($("fDur").value, 10) || 0, salaId: $("fSala").value || null, bancaIds: [...$("fBanca").querySelectorAll("input:checked")].map(c => c.value) };
   if (pdfAtual) n.pdf = pdfAtual;
   const av = $("fAviso"); const erro = txt => { av.textContent = txt; av.classList.remove("oculto"); };
-  if (!n.alunoId || !fases.length || !n.data || n.duracao < 15) return erro("Informe aluno, ao menos uma fase, data e duração de pelo menos 15 minutos.");
+  if (!n.alunoId || !fases.length || !n.data || n.duracao < 15) return erro("Informe aluno, a etapa, data e duração de pelo menos 15 minutos.");
+  if (fases.length === 2 && et1 === "QUAL") return erro("Escolha qualificação ou defesa, não as duas.");
   const dia = parseBR(n.data).getDay(); if (dia < 1 || dia > 5) return erro("Escolha um dia de segunda a sexta.");
   if (toMin(n.inicio) + n.duracao > DIA_FIM) return erro("A defesa termina depois das 18:00.");
   if (!n.bancaIds.length) return erro("Selecione ao menos um membro da banca.");
   const i = data.defesas.findIndex(x => x.id === n.id);
   if (i >= 0) data.defesas[i] = n; else data.defesas.push(n);
   editDefesaId = n.id;
-  reg("defesa", "Defesa de «" + aluno(n.alunoId).nome + "» (" + rotuloFases(n.fases) + ") em " + n.data + " às " + n.inicio + " por " + n.duracao + " min.");
+  reg("defesa", "Defesa de «" + aluno(n.alunoId).nome + "» (" + rotuloDef(n) + ") em " + n.data + " às " + n.inicio + " por " + n.duracao + " min.");
   semana = segunda(parseBR(n.data)); aba = "grade";
   $("dlgDefesa").close(); desenhar();
 };
@@ -905,7 +943,7 @@ function infoCard(d) {
   const o = prof(al.orientadorId), co = al.coorientadorId ? prof(al.coorientadorId) : null;
   const sala = d.salaId ? data.salas.find(x => x.id === d.salaId) : null;
   return {
-    tcc: d.fases.length === 2 ? "1 e 2" : d.fases[0].replace("TCC", ""),
+    rotulo: ehPos(al) ? (d.fases[0] === "QUAL" ? "QUALIFICAÇÃO DE " : "DEFESA DE ") + NIVEIS[nivel(al)].toUpperCase() : "DEFESA DE TCC " + (d.fases.length === 2 ? "1 e 2" : d.fases[0].replace("TCC", "")),
     aluno: al.nome, titulo: (d.titulo || "A definir").toUpperCase(),
     orientador: o ? o.nome : "", coorientador: co ? co.nome : "",
     data: dt.getDate() + " de " + MESES[dt.getMonth()] + " às " + h + "h" + (m ? pad(m) : ""),
@@ -936,7 +974,7 @@ function desenharCard(cv, info, pal) {
   for (let n = 1; n <= 14; n++) c.fillText(String(n), 40, 65 + 49 * n);
 
   // título grande, reduzido se não couber
-  const rotulo = "# DEFESA DE TCC " + info.tcc;
+  const rotulo = "# " + info.rotulo;
   let tam = 82; c.font = "bold " + tam + "px " + FONTE;
   const larg = c.measureText(rotulo).width;
   if (larg > 930) tam = Math.floor(tam * 930 / larg);
@@ -999,6 +1037,7 @@ function abrirCard(d) {
   if (!sel.options.length) Object.keys(PALETAS).forEach(n => { const o = document.createElement("option"); o.value = n; o.textContent = n; sel.append(o); });
   sel.value = paletaAleatoria(null);
   const cl = $("cdLinks"); cl.textContent = ""; cl.append(...anchors(d, "bt")); cl.classList.toggle("oculto", !cl.childNodes.length);
+  $("cdZip").classList.toggle("oculto", ehPos(aluno(d.alunoId)));
   redesenharCard(); $("dlgCard").showModal();
 }
 $("cdPaleta").onchange = redesenharCard;
@@ -1341,6 +1380,8 @@ function carregarPdfLib() {
   return pdfPronto;
 }
 async function gerarZip(ds, rotulo) {
+  const total = ds.length; ds = ds.filter(d => !ehPos(aluno(d.alunoId)));
+  if (total && !ds.length) { $("status").textContent = "Atas e fichas por enquanto só para TCC; o período só tem defesas de pós."; return; }
   if (!ds.length) { $("status").textContent = "Nenhuma defesa no período para gerar documentos."; return; }
   const faltam = [...new Set(ds.flatMap(d => membrosOrdenados(d)))].map(prof).filter(p => !p.trat || !p.grau).map(p => p.nome);
   $("status").textContent = "Gerando PDFs..." + (faltam.length ? " Atenção: sem tratamento ou titulação na aba Professores: " + faltam.join(", ") + "." : "");
@@ -1373,7 +1414,7 @@ function linhaImp(d) {
   const banca = d.bancaIds.filter(x => x !== al.orientadorId && x !== al.coorientadorId).map(nomeProf);
   return {
     data: d.data, dia: DIAS_SEM[dt.getDay()], ini: d.inicio, fim: fmtMin(fimMin(d)), dur: d.duracao + " min",
-    fase: rotuloFases(d.fases), aluno: al.nome, titulo: d.titulo || "", orient: o ? o.nome : "", coorient: co ? co.nome : "",
+    fase: rotuloDef(d), aluno: al.nome, titulo: d.titulo || "", orient: o ? o.nome : "", coorient: co ? co.nome : "",
     banca: banca.join(", "), todos: d.bancaIds.map(nomeProf).join(", "), sala: nomeSala(d.salaId),
     link: (salaDe(d) || {}).link || "", pdf: d.pdf ? baseSite() + d.pdf : ""
   };

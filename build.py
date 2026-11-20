@@ -53,7 +53,10 @@ def verificar(a, base="."):
     profs = {p["id"] for p in a.get("professores", [])}
     alunos = {x["id"] for x in a.get("alunos", [])}
     salas = {x["id"] for x in a.get("salas", [])}
+    alunos_niv = {x["id"]: x.get("nivel", "grad") for x in a.get("alunos", [])}
     for x in a.get("alunos", []):
+        if x.get("nivel", "grad") not in ("grad", "mestrado", "doutorado"):
+            erros.append("aluno %s: nível inválido" % x["nome"])
         for campo in ("orientadorId", "coorientadorId"):
             if x.get(campo) and x[campo] not in profs:
                 erros.append("aluno %s: %s inexistente" % (x["nome"], campo))
@@ -74,8 +77,10 @@ def verificar(a, base="."):
             erros.append("defesa %s: fora da janela das 08:00 às 18:00" % nome)
         if d.get("alunoId") not in alunos:
             erros.append("defesa %s: aluno inexistente" % nome)
-        if not d.get("fases") or any(f not in ("TCC1", "TCC2") for f in d["fases"]):
-            erros.append("defesa %s: fases inválidas" % nome)
+        nv = alunos_niv.get(d.get("alunoId"), "grad")
+        validas = ("TCC1", "TCC2") if nv == "grad" else ("QUAL", "DEF")
+        if not d.get("fases") or any(f not in validas for f in d["fases"]) or (nv != "grad" and len(d["fases"]) != 1):
+            erros.append("defesa %s: etapa inválida para o nível %s" % (nome, nv))
         if not d.get("bancaIds") or any(b not in profs for b in d["bancaIds"]):
             erros.append("defesa %s: banca vazia ou com professor inexistente" % nome)
         if d.get("salaId") and d["salaId"] not in salas:
@@ -109,8 +114,12 @@ class Agenda:
         al = self.aluno.get(d["alunoId"], {})
         return pid in d["bancaIds"] or pid in (al.get("orientadorId"), al.get("coorientadorId"))
 
-    def fase(self, d):
-        return "TCC 1 e 2" if len(d["fases"]) == 2 else d["fases"][0].replace("TCC", "TCC ")
+    def evento(self, d):
+        """Ex.: Defesa de TCC 2, Qualificação de mestrado, Defesa de doutorado."""
+        nv = self.aluno.get(d["alunoId"], {}).get("nivel", "grad")
+        if nv != "grad":
+            return ("Qualificação" if d["fases"][0] == "QUAL" else "Defesa") + " de " + nv
+        return "Defesa de " + ("TCC 1 e 2" if len(d["fases"]) == 2 else d["fases"][0].replace("TCC", "TCC "))
 
     def info(self, d):
         al = self.aluno.get(d["alunoId"], {})
@@ -169,7 +178,7 @@ def ics(ag, defesas, nome_cal, agora):
         desc.append(URL + "d/" + id_seguro(d["id"]) + ".html")
         L += ["BEGIN:VEVENT", "UID:defesa-" + id_seguro(d["id"]) + "@cser-uft.github.io", "DTSTAMP:" + fmt(agora),
               "DTSTART:" + fmt(ini), "DTEND:" + fmt(fim),
-              "SUMMARY:" + esc_ics("Defesa de " + ag.fase(d) + ": " + i["aluno"]),
+              "SUMMARY:" + esc_ics(ag.evento(d) + ": " + i["aluno"]),
               "LOCATION:" + esc_ics(i["link"] if i["remoto"] else i["sala"]), "DESCRIPTION:" + esc_ics("\n".join(desc)),
               "URL:" + URL + "d/" + id_seguro(d["id"]) + ".html", "END:VEVENT"]
     L.append("END:VCALENDAR")
@@ -179,7 +188,7 @@ def ics(ag, defesas, nome_cal, agora):
 def pagina_defesa(ag, d):
     ini, _ = quando(d)
     i = ag.info(d)
-    titulo = "Defesa de %s: %s" % (ag.fase(d), i["aluno"])
+    titulo = "%s: %s" % (ag.evento(d), i["aluno"])
     quando_txt = "%d de %s às %dh%s" % (ini.day, MESES[ini.month - 1], ini.hour, "%02d" % ini.minute if ini.minute else "")
     desc = quando_txt + ", " + i["sala"] + (". " + i["titulo"] if i["titulo"] else "")
     destino = "../?defesa=" + id_seguro(d["id"])

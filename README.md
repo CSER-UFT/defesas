@@ -1,6 +1,6 @@
 # Agenda de defesas de TCC
 
-Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda a sexta, das 08:00 às 18:00, com início de 15 em 15 minutos e duração livre. Não usa servidor nem banco de dados: os dados ficam em um arquivo JSON no seu computador.
+Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, e qualificações e defesas de mestrado e doutorado, de segunda a sexta, das 08:00 às 18:00, com início de 15 em 15 minutos e duração livre. Não usa servidor nem banco de dados: os dados ficam em um arquivo JSON no seu computador.
 
 ## Como usar
 
@@ -10,6 +10,7 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda 
 
 ## Recursos
 
+- Níveis: cada aluno é de graduação (TCC), mestrado ou doutorado. Na grade, a cor indica o nível (azul TCC, laranja mestrado, roxo doutorado), o selo indica a etapa (T1, T2, T1+2, Q, D) e a borda tracejada marca a primeira etapa (TCC1 ou qualificação). Atas e fichas em PDF, por enquanto, só para TCC.
 - Fase automática: o aluno passa para TCC 2 no dia seguinte à defesa de TCC 1, com ajuste manual e defesa combinada (TCC 1 e 2).
 - Conflitos de banca, sala e indisponibilidade sinalizados em vermelho, e horários livres em comum entre professores.
 - Card de divulgação em PNG (1080x1080) com paleta sorteada.
