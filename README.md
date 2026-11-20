@@ -15,6 +15,7 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda 
 - Card de divulgação em PNG (1080x1080) com paleta sorteada.
 - Atas e fichas de avaliação em PDF, em um ZIP, para uma defesa ou para um período.
 - Impressão em planilha e exportação em CSV.
+- Agenda de um professor por link: escolha **Agenda de ...** na tela e clique em **Copiar link**. O link tem a forma `?prof=tiago_almeida` (nome curto do professor), abre só as defesas dele com os horários livres em verde, e a impressão, o CSV e o ZIP passam a seguir o mesmo filtro.
 
 ## Privacidade
 

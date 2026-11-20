@@ -264,6 +264,7 @@ let aba = "grade";
 let editDefesaId = null;
 let editAlunoId = null;
 let selecionados = new Set();
+let filtroProf = null;       // id do professor cuja agenda está sendo exibida (link ?prof=)
 
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2, "0");
@@ -286,6 +287,22 @@ function prof(id) { return data.professores.find(x => x.id === id); }
 function nomeProf(id) { const p = prof(id); return p ? p.curto : "?"; }
 function nomeSala(id) { const s = data.salas.find(x => x.id === id); return s ? s.curto : "A definir"; }
 function aluno(id) { return data.alunos.find(x => x.id === id); }
+function profSlug(pr) { return slug(pr.curto || pr.nome); }
+function profDoParam(v) { if (!v) return null; v = String(v).toLowerCase(); const pr = data.professores.find(x => x.id.toLowerCase() === v || profSlug(x) === v); return pr ? pr.id : null; }
+function participa(d, pid) { if (d.bancaIds.includes(pid)) return true; const al = aluno(d.alunoId); return !!al && (al.orientadorId === pid || al.coorientadorId === pid); }
+function defesasVisiveis() { return filtroProf ? data.defesas.filter(d => participa(d, filtroProf)) : data.defesas; }
+function linkAgenda(pid) {
+  const u = new URL(location.href); u.hash = "";
+  const pr = pid ? prof(pid) : null;
+  if (pr) u.searchParams.set("prof", profSlug(pr)); else u.searchParams.delete("prof");
+  return u.toString();
+}
+function aplicarFiltro(pid) {
+  filtroProf = pid;
+  try { history.replaceState(null, "", linkAgenda(pid)); } catch (e) {}
+  if (pid) { selecionados = new Set([pid]); const h = hoje(); const f = defesasVisiveis().map(x => parseBR(x.data)).filter(x => x >= h).sort((a, b) => a - b); if (f.length) semana = segunda(f[0]); }
+  else selecionados = new Set();
+}
 function porNome(lista) { return [...lista].sort((x, y) => x.nome.localeCompare(y.nome, "pt-BR", { sensitivity: "base" })); }
 
 function hoje() {
@@ -359,7 +376,28 @@ function telaGrade(p) {
   const item = (cor, txt) => { const sp = document.createElement("span"); const i = document.createElement("i"); i.style.background = cor; sp.append(i, txt); lg.append(sp); };
   item("#2F6FEB", "TCC1"); item("#D9822B", "TCC2"); item("#7A4FD1", "TCC1 e 2"); item("#D64545", "Conflito");
   if (selecionados.size) { item("#2E9E6B", "Livre para a banca"); item("#9AA3AF", "Ocupado"); }
-  tb.append(nav, rot, lg); p.append(tb);
+  const vis = document.createElement("div"); vis.className = "form1"; vis.style.margin = "0";
+  const sv = document.createElement("select"); sv.title = "Ver a agenda de um professor"; sv.setAttribute("aria-label", "Ver a agenda de");
+  const o0 = document.createElement("option"); o0.value = ""; o0.textContent = "Agenda de todos"; sv.append(o0);
+  porNome(data.professores).forEach(pr => { const o = document.createElement("option"); o.value = pr.id; o.textContent = "Agenda de " + pr.curto; sv.append(o); });
+  sv.value = filtroProf || "";
+  sv.onchange = () => { aplicarFiltro(sv.value || null); desenhar(); };
+  const bl = document.createElement("button"); bl.type = "button"; bl.textContent = "Copiar link";
+  bl.title = filtroProf ? "Copia o link que abre direto nesta agenda" : "Copia o link da agenda completa";
+  bl.onclick = async () => {
+    const url = linkAgenda(filtroProf);
+    try { await navigator.clipboard.writeText(url); $("status").textContent = "Link copiado: " + url; }
+    catch (e) { $("status").textContent = "Copie o link: " + url; }
+  };
+  vis.append(sv, bl);
+  tb.append(nav, rot, vis, lg); p.append(tb);
+  if (filtroProf) {
+    const av = document.createElement("div"); av.className = "chips";
+    av.append("Mostrando somente as defesas de " + nomeProf(filtroProf) + ", com os horários livres dele em verde. ");
+    const vt = document.createElement("button"); vt.type = "button"; vt.className = "chip"; vt.textContent = "Ver agenda completa";
+    vt.onclick = () => { aplicarFiltro(null); desenhar(); };
+    av.append(vt); p.append(av);
+  }
 
   const f = document.createElement("div"); f.className = "chips";
   f.append("Disponibilidade de");
@@ -398,7 +436,7 @@ function colunaDia(dia) {
     }
     fecha(DIA_FIM);
   }
-  const lista = data.defesas.filter(d => d.data === ds).sort((a, b) => toMin(a.inicio) - toMin(b.inicio));
+  const lista = defesasVisiveis().filter(d => d.data === ds).sort((a, b) => toMin(a.inicio) - toMin(b.inicio));
   const faixa = []; let fimCluster = -1; let cluster = [];
   const fechaCluster = () => { if (!cluster.length) return; const n = Math.max(...cluster.map(x => x.lane)) + 1; cluster.forEach(x => { x.n = n; faixa.push(x); }); cluster = []; };
   lista.forEach(d => {
@@ -860,7 +898,11 @@ function iniciar(d, origem) {
   const h = hoje();
   const futuras = data.defesas.map(x => parseBR(x.data)).filter(x => x >= h).sort((a, b) => a - b);
   semana = segunda(futuras.length ? futuras[0] : h);
-  $("status").textContent = origem; sujo = false;
+  filtroProf = null; selecionados = new Set();
+  const qp = new URLSearchParams(location.search).get("prof");
+  const pid = profDoParam(qp);
+  if (pid) aplicarFiltro(pid);
+  $("status").textContent = origem + (qp && !pid ? " · Professor «" + qp + "» do link não encontrado; exibindo a agenda completa." : ""); sujo = false;
   desenhar();
 }
 async function carregarDoHandle(h, prefixo) {
@@ -1170,7 +1212,7 @@ async function gerarZip(ds, rotulo) {
 const DIAS_SEM = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
 function defesasImp() {
   const esc = $("impEsc").value, h = hoje();
-  let l = [...data.defesas];
+  let l = [...defesasVisiveis()];
   if (esc === "semana") { const a = semana, b = somaDias(semana, 5); l = l.filter(d => { const dt = parseBR(d.data); return dt >= a && dt < b; }); }
   else if (esc === "futuras") l = l.filter(d => parseBR(d.data) >= h);
   l.sort((x, y) => (parseBR(x.data) - parseBR(y.data)) || (toMin(x.inicio) - toMin(y.inicio)));
@@ -1191,7 +1233,7 @@ function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").
 function montarFolha() {
   const ds = defesasImp(), linhas = ds.map(linhaImp);
   const rot = { semana: "Semana de " + fmtBR(semana) + " a " + fmtBR(somaDias(semana, 4)), futuras: "Defesas a partir de " + fmtBR(hoje()), todas: "Todas as defesas" }[$("impEsc").value];
-  let h = "<h1>Agenda de defesas de TCC</h1><div class='sub'>" + esc(rot) + " · " + ds.length + " defesa(s) · emitido em " + fmtBR(new Date()) + "</div>";
+  let h = "<h1>Agenda de defesas de TCC" + (filtroProf ? " · " + esc((prof(filtroProf) || { nome: "" }).nome) : "") + "</h1><div class='sub'>" + esc(rot) + " · " + ds.length + " defesa(s) · emitido em " + fmtBR(new Date()) + "</div>";
   h += "<table><tr><th>Nº</th><th>Data</th><th>Dia</th><th>Início</th><th>Fim</th><th>Duração</th><th>Fase</th><th>Aluno</th><th>Título do trabalho</th><th>Orientador</th><th>Coorientador</th><th>Demais membros da banca</th><th>Sala</th></tr>";
   linhas.forEach((r, i) => {
     h += "<tr><td class='c'>" + (i + 1) + "</td><td class='c'>" + r.data + "</td><td>" + r.dia + "</td><td class='c'>" + r.ini + "</td><td class='c'>" + r.fim + "</td><td class='c'>" + r.dur + "</td><td class='c'>" + r.fase + "</td><td>" + esc(r.aluno) + "</td><td>" + esc(r.titulo || "A definir") + "</td><td>" + esc(r.orient) + "</td><td>" + esc(r.coorient || "") + "</td><td>" + esc(r.banca) + "</td><td>" + esc(r.sala) + "</td></tr>";
