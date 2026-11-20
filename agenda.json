@@ -1,415 +1,410 @@
 {
- "formato": "agendatcc",
- "schema": 1,
- "nome": "Agenda de TCC",
- "salvoEm": 1795209362883,
- "config": {
-  "titulo": "AGENDA DE DEFESAS DE TCC",
-  "subtitulo": "",
-  "coordenador": "",
-  "cargo": "",
-  "unidade": ""
- },
- "professores": [
-  {
-   "id": "p1",
-   "nome": "Tiago da Silva Almeida",
-   "curto": "Tiago Almeida",
-   "grau": "Dr.",
-   "trat": "Prof."
+  "formato": "agendatcc",
+  "schema": 1,
+  "nome": "Agenda de TCC",
+  "salvoEm": 1795211889124,
+  "config": {
+    "titulo": "AGENDA DE DEFESAS DE TCC",
+    "subtitulo": "",
+    "coordenador": "",
+    "cargo": "",
+    "unidade": ""
   },
-  {
-   "id": "p2",
-   "nome": "Warley Gramacho da Silva",
-   "curto": "Warley Gramacho",
-   "grau": "Dr.",
-   "trat": "Prof."
-  },
-  {
-   "id": "p3",
-   "nome": "Edeilson Milhomem da Silva",
-   "curto": "Edeilson Milhomem",
-   "grau": "Dr.",
-   "trat": "Prof."
-  },
-  {
-   "id": "p4",
-   "nome": "Leonardo Costa Rezende",
-   "curto": "Leonardo Rezende",
-   "grau": "Me.",
-   "trat": "Prof."
-  },
-  {
-   "id": "pmwmwsgtt6zb",
-   "nome": "Daniel Martins da Silva",
-   "curto": "Daniel Martins",
-   "grau": "Dr.",
-   "trat": "Prof."
-  },
-  {
-   "id": "pmwnn3nfbzdt",
-   "nome": "Felipe Sousa Barbosa",
-   "curto": "Felipe Barbosa",
-   "grau": "Bel."
-  }
- ],
- "salas": [
-  {
-   "id": "smwmwvhj3fyv",
-   "nome": "LABTEC",
-   "curto": "LABTEC"
-  },
-  {
-   "id": "smwmwvra0hcv",
-   "nome": "Remoto",
-   "curto": "Remoto"
-  }
- ],
- "alunos": [
-  {
-   "id": "a1",
-   "nome": "Tarciso Filho de Miranda Dias",
-   "orientadorId": "p2",
-   "faseManual": "TCC2",
-   "concluido": false,
-   "coorientadorId": "p1"
-  },
-  {
-   "id": "a2",
-   "nome": "Daniel Barbosa de Assis Costa",
-   "orientadorId": "p2",
-   "faseManual": "TCC2",
-   "concluido": false,
-   "coorientadorId": "p1"
-  },
-  {
-   "id": "a3",
-   "nome": "Pablo Pereira Brito",
-   "orientadorId": "p1",
-   "faseManual": "TCC2",
-   "concluido": false,
-   "coorientadorId": null
-  },
-  {
-   "id": "a4",
-   "nome": "Rafael Soares Lopes de Souza",
-   "orientadorId": "p1",
-   "faseManual": "TCC2",
-   "concluido": false,
-   "coorientadorId": null
-  },
-  {
-   "id": "a5",
-   "nome": "Aluno Exemplo 5 (concluído, não aparece)",
-   "orientadorId": "p3",
-   "faseManual": null,
-   "concluido": true
-  },
-  {
-   "id": "amwmwv372tev",
-   "nome": "Pedro Lucas Moreira Pinto",
-   "orientadorId": "p2",
-   "faseManual": null,
-   "concluido": false,
-   "coorientadorId": "p1"
-  },
-  {
-   "id": "amwnmyd623ob",
-   "nome": "Lucas Gabriel Costa Farias",
-   "orientadorId": "p1",
-   "coorientadorId": null,
-   "faseManual": null,
-   "concluido": false
-  },
-  {
-   "id": "amwnmynaewqv",
-   "nome": "Gabriel Fernandes Zamora",
-   "orientadorId": "p1",
-   "coorientadorId": null,
-   "faseManual": null,
-   "concluido": false
-  },
-  {
-   "id": "amwnmz0dp4xv",
-   "nome": "Gabriel Barbosa dos Santos Martiliano",
-   "orientadorId": "p1",
-   "coorientadorId": null,
-   "faseManual": null,
-   "concluido": false
-  },
-  {
-   "id": "amwnmze7zgpb",
-   "nome": "Vinícius Wanderley Arruda",
-   "orientadorId": "p1",
-   "coorientadorId": null,
-   "faseManual": "TCC2",
-   "concluido": false
-  },
-  {
-   "id": "amwnmzw21d1j",
-   "nome": "Marcus Vinicius Guimaraes Balbino",
-   "orientadorId": "p1",
-   "coorientadorId": null,
-   "faseManual": null,
-   "concluido": false
-  },
-  {
-   "id": "amwnn51356xx",
-   "nome": "Neci Mendes Fialho",
-   "orientadorId": "p2",
-   "coorientadorId": null,
-   "faseManual": "TCC2",
-   "concluido": false
-  },
-  {
-   "id": "amwnn5nypi87",
-   "nome": "Mayconn Cardoso Soares",
-   "orientadorId": "p2",
-   "coorientadorId": null,
-   "faseManual": "TCC2",
-   "concluido": false
-  }
- ],
- "defesas": [
-  {
-   "id": "dmwmxo3w4lb5",
-   "alunoId": "a1",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "SELEÇÃO DE SOMADORES APROXIMADOS EM FPGAS UTILIZANDO A META-HEURÍSTICA GRASP",
-   "data": "30/11/2026",
-   "inicio": "08:00",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "p3",
-    "p4",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwmxoekdi5d",
-   "alunoId": "a2",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "Alocação Otimizada de Multiplicadores com Truncamento de Bits em FPGAs Utilizando a Meta-heurística VNS",
-   "data": "30/11/2026",
-   "inicio": "08:45",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "p3",
-    "p4",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwmxph7ozca",
-   "alunoId": "a3",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "Análise de Desempenho e Consumo Energético de Somadores Aproximados Implementados em FPGA",
-   "data": "30/11/2026",
-   "inicio": "10:15",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "p4",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwmxseve18b",
-   "alunoId": "a4",
-   "fases": [
-    "TCC1",
-    "TCC2"
-   ],
-   "titulo": "Ordenação Aproximada em CPU Convencional: Caracterização Empírica do Trade-off entre Precisão e Energia",
-   "data": "30/11/2026",
-   "inicio": "14:00",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "pmwnn3nfbzdt",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwmxt0dp2fm",
-   "alunoId": "amwmwv372tev",
-   "fases": [
-    "TCC1"
-   ],
-   "titulo": "Aprimoramento de Algoritmos de Escalonamento de Entrada e Saída no Kernel do Linux para Operações de Leitura e Gravação com Vários Processos",
-   "data": "30/11/2026",
-   "inicio": "09:30",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "p3",
-    "p4",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwnnetqad9a",
-   "alunoId": "amwnmze7zgpb",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "Avaliação de Desempenho, Energia e Precisão em Operações Matriciais Aproximadas em Software",
-   "data": "30/11/2026",
-   "inicio": "14:45",
-   "duracao": 40,
-   "salaId": "smwmwvra0hcv",
-   "bancaIds": [
-    "pmwnn3nfbzdt",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwnni6gb8gc",
-   "alunoId": "amwnn51356xx",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "Seleção Multiobjetivo de Atributos para Detecção de Intrusão Utilizando Metaheurísticas",
-   "data": "03/12/2026",
-   "inicio": "08:00",
-   "duracao": 40,
-   "salaId": "smwmwvhj3fyv",
-   "bancaIds": [
-    "pmwmwsgtt6zb",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwnnisufn4d",
-   "alunoId": "amwnn5nypi87",
-   "fases": [
-    "TCC2"
-   ],
-   "titulo": "UMA METAHEURÍSTICA ITERATED LOCAL SEARCH PARA O PROBLEMA DE ROTEAMENTO DE VEÍCULOS COM ARMÁRIOS INTELIGENTES",
-   "data": "03/12/2026",
-   "inicio": "08:45",
-   "duracao": 40,
-   "salaId": "smwmwvhj3fyv",
-   "bancaIds": [
-    "pmwmwsgtt6zb",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwnnjoe8xpb",
-   "alunoId": "amwnmz0dp4xv",
-   "fases": [
-    "TCC1"
-   ],
-   "titulo": "Simulador para Análise de Propagação de Erros em Grafos de Fluxo de Dados",
-   "data": "03/12/2026",
-   "inicio": "09:30",
-   "duracao": 40,
-   "salaId": null,
-   "bancaIds": [
-    "pmwmwsgtt6zb",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwnnpgehzdz",
-   "alunoId": "amwnmyd623ob",
-   "fases": [
-    "TCC1"
-   ],
-   "titulo": "",
-   "data": "03/12/2026",
-   "inicio": "10:15",
-   "duracao": 40,
-   "salaId": null,
-   "bancaIds": [
-    "pmwmwsgtt6zb",
-    "p1",
-    "p2"
-   ]
-  },
-  {
-   "id": "dmwphanoxex6",
-   "alunoId": "amwnmynaewqv",
-   "fases": [
-    "TCC1"
-   ],
-   "titulo": "",
-   "data": "02/12/2026",
-   "inicio": "09:00",
-   "duracao": 40,
-   "salaId": null,
-   "bancaIds": [
-    "pmwmwsgtt6zb",
-    "p3",
-    "p1"
-   ]
-  }
- ],
- "indisponibilidades": [
-  {
-   "profId": "p4",
-   "data": "02/12/2026",
-   "inicio": "08:00",
-   "fim": "12:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p4",
-   "data": "03/12/2026",
-   "inicio": "08:00",
-   "fim": "12:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p2",
-   "data": "01/12/2026",
-   "inicio": "08:00",
-   "fim": "12:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p1",
-   "data": "01/12/2026",
-   "inicio": "14:00",
-   "fim": "18:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p1",
-   "data": "02/12/2026",
-   "inicio": "14:00",
-   "fim": "18:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p2",
-   "data": "02/12/2026",
-   "inicio": "08:00",
-   "fim": "12:00",
-   "motivo": ""
-  },
-  {
-   "profId": "p1",
-   "data": "04/12/2026",
-   "inicio": "08:00",
-   "fim": "12:00",
-   "motivo": ""
-  }
- ],
- "log": []
+  "professores": [
+    {
+      "id": "p1",
+      "nome": "Tiago da Silva Almeida",
+      "curto": "Tiago Almeida",
+      "grau": "Dr.",
+      "trat": "Prof."
+    },
+    {
+      "id": "p2",
+      "nome": "Warley Gramacho da Silva",
+      "curto": "Warley Gramacho",
+      "grau": "Dr.",
+      "trat": "Prof."
+    },
+    {
+      "id": "p3",
+      "nome": "Edeilson Milhomem da Silva",
+      "curto": "Edeilson Milhomem",
+      "grau": "Dr.",
+      "trat": "Prof."
+    },
+    {
+      "id": "p4",
+      "nome": "Leonardo Costa Rezende",
+      "curto": "Leonardo Rezende",
+      "grau": "Me.",
+      "trat": "Prof."
+    },
+    {
+      "id": "pmwmwsgtt6zb",
+      "nome": "Daniel Martins da Silva",
+      "curto": "Daniel Martins",
+      "grau": "Dr.",
+      "trat": "Prof."
+    },
+    {
+      "id": "pmwnn3nfbzdt",
+      "nome": "Felipe Sousa Barbosa",
+      "curto": "Felipe Barbosa",
+      "grau": "Bel."
+    }
+  ],
+  "salas": [
+    {
+      "id": "smwmwvhj3fyv",
+      "nome": "LABTEC",
+      "curto": "LABTEC"
+    },
+    {
+      "id": "smwmwvra0hcv",
+      "nome": "Remoto",
+      "curto": "Remoto"
+    }
+  ],
+  "alunos": [
+    {
+      "id": "a1",
+      "nome": "Tarciso Filho de Miranda Dias",
+      "orientadorId": "p2",
+      "faseManual": "TCC2",
+      "concluido": false,
+      "coorientadorId": "p1"
+    },
+    {
+      "id": "a2",
+      "nome": "Daniel Barbosa de Assis Costa",
+      "orientadorId": "p2",
+      "faseManual": "TCC2",
+      "concluido": false,
+      "coorientadorId": "p1"
+    },
+    {
+      "id": "a3",
+      "nome": "Pablo Pereira Brito",
+      "orientadorId": "p1",
+      "faseManual": "TCC2",
+      "concluido": false,
+      "coorientadorId": null
+    },
+    {
+      "id": "a4",
+      "nome": "Rafael Soares Lopes de Souza",
+      "orientadorId": "p1",
+      "faseManual": "TCC2",
+      "concluido": false,
+      "coorientadorId": null
+    },
+    {
+      "id": "a5",
+      "nome": "Aluno Exemplo 5 (concluído, não aparece)",
+      "orientadorId": "p3",
+      "faseManual": null,
+      "concluido": true
+    },
+    {
+      "id": "amwmwv372tev",
+      "nome": "Pedro Lucas Moreira Pinto",
+      "orientadorId": "p2",
+      "faseManual": null,
+      "concluido": false,
+      "coorientadorId": "p1"
+    },
+    {
+      "id": "amwnmyd623ob",
+      "nome": "Lucas Gabriel Costa Farias",
+      "orientadorId": "p1",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwnmynaewqv",
+      "nome": "Gabriel Fernandes Zamora",
+      "orientadorId": "p1",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwnmz0dp4xv",
+      "nome": "Gabriel Barbosa dos Santos Martiliano",
+      "orientadorId": "p1",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwnmze7zgpb",
+      "nome": "Vinícius Wanderley Arruda",
+      "orientadorId": "p1",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwnmzw21d1j",
+      "nome": "Marcus Vinicius Guimaraes Balbino",
+      "orientadorId": "p1",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwnn51356xx",
+      "nome": "Neci Mendes Fialho",
+      "orientadorId": "p2",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwnn5nypi87",
+      "nome": "Mayconn Cardoso Soares",
+      "orientadorId": "p2",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    }
+  ],
+  "defesas": [
+    {
+      "id": "dmwmxo3w4lb5",
+      "alunoId": "a1",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "SELEÇÃO DE SOMADORES APROXIMADOS EM FPGAS UTILIZANDO A META-HEURÍSTICA GRASP",
+      "data": "30/11/2026",
+      "inicio": "08:00",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "p3",
+        "p4",
+        "p2"
+      ],
+      "pdf": "trabalhos/20261130_tarciso_filho_de_miranda_dias.pdf"
+    },
+    {
+      "id": "dmwmxoekdi5d",
+      "alunoId": "a2",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "Alocação Otimizada de Multiplicadores com Truncamento de Bits em FPGAs Utilizando a Meta-heurística VNS",
+      "data": "30/11/2026",
+      "inicio": "08:45",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "p3",
+        "p4",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwmxph7ozca",
+      "alunoId": "a3",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "Análise de Desempenho e Consumo Energético de Somadores Aproximados Implementados em FPGA",
+      "data": "30/11/2026",
+      "inicio": "10:15",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "p4",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwmxseve18b",
+      "alunoId": "a4",
+      "fases": [
+        "TCC1",
+        "TCC2"
+      ],
+      "titulo": "Ordenação Aproximada em CPU Convencional: Caracterização Empírica do Trade-off entre Precisão e Energia",
+      "data": "30/11/2026",
+      "inicio": "14:00",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "pmwnn3nfbzdt",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwmxt0dp2fm",
+      "alunoId": "amwmwv372tev",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "Aprimoramento de Algoritmos de Escalonamento de Entrada e Saída no Kernel do Linux para Operações de Leitura e Gravação com Vários Processos",
+      "data": "30/11/2026",
+      "inicio": "09:30",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "p3",
+        "p4",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwnnetqad9a",
+      "alunoId": "amwnmze7zgpb",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "Avaliação de Desempenho, Energia e Precisão em Operações Matriciais Aproximadas em Software",
+      "data": "30/11/2026",
+      "inicio": "14:45",
+      "duracao": 40,
+      "salaId": "smwmwvra0hcv",
+      "bancaIds": [
+        "pmwnn3nfbzdt",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwnni6gb8gc",
+      "alunoId": "amwnn51356xx",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "Seleção Multiobjetivo de Atributos para Detecção de Intrusão Utilizando Metaheurísticas",
+      "data": "03/12/2026",
+      "inicio": "08:00",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwnnisufn4d",
+      "alunoId": "amwnn5nypi87",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "UMA METAHEURÍSTICA ITERATED LOCAL SEARCH PARA O PROBLEMA DE ROTEAMENTO DE VEÍCULOS COM ARMÁRIOS INTELIGENTES",
+      "data": "03/12/2026",
+      "inicio": "08:45",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwnnjoe8xpb",
+      "alunoId": "amwnmz0dp4xv",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "Simulador para Análise de Propagação de Erros em Grafos de Fluxo de Dados",
+      "data": "03/12/2026",
+      "inicio": "09:30",
+      "duracao": 40,
+      "salaId": null,
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p1",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwnnpgehzdz",
+      "alunoId": "amwnmyd623ob",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "",
+      "data": "03/12/2026",
+      "inicio": "10:15",
+      "duracao": 40,
+      "salaId": null,
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p1",
+        "p2"
+      ]
+    }
+  ],
+  "indisponibilidades": [
+    {
+      "profId": "p4",
+      "data": "02/12/2026",
+      "inicio": "08:00",
+      "fim": "12:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p4",
+      "data": "03/12/2026",
+      "inicio": "08:00",
+      "fim": "12:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p2",
+      "data": "01/12/2026",
+      "inicio": "08:00",
+      "fim": "12:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p1",
+      "data": "01/12/2026",
+      "inicio": "14:00",
+      "fim": "18:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p1",
+      "data": "02/12/2026",
+      "inicio": "14:00",
+      "fim": "18:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p2",
+      "data": "02/12/2026",
+      "inicio": "08:00",
+      "fim": "12:00",
+      "motivo": ""
+    },
+    {
+      "profId": "p1",
+      "data": "04/12/2026",
+      "inicio": "08:00",
+      "fim": "12:00",
+      "motivo": ""
+    }
+  ],
+  "log": [
+    {
+      "ts": 1795211522340,
+      "tipo": "defesa",
+      "texto": "Defesa de «Tarciso Filho de Miranda Dias» (TCC2) em 30/11/2026 às 08:00 por 40 min."
+    },
+    {
+      "ts": 1795211888523,
+      "tipo": "defesa",
+      "texto": "Defesa de «Gabriel Fernandes Zamora» em 02/12/2026 excluída."
+    }
+  ]
 }
