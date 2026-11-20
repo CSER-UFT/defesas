@@ -835,7 +835,15 @@ async function obterPasta() {
   pastaRepo = h; try { const db = await abrirIdb(); db.transaction("h", "readwrite").objectStore("h").put(h, "pasta"); } catch (e) {}
   return h;
 }
-$("fPdfEsc").onclick = () => $("fPdfArq").click();
+$("fPdfEsc").onclick = async () => {
+  if (!("showDirectoryPicker" in window)) { $("fPdfArq").click(); return; }
+  const av = $("fAviso");
+  try {
+    if (pastaRepo && (await pastaRepo.queryPermission({ mode: "readwrite" })) === "granted") { $("fPdfArq").click(); return; }
+    await obterPasta();
+    av.textContent = "Pasta do repositório definida. Clique em Escolher PDF de novo para selecionar o arquivo."; av.classList.remove("oculto");
+  } catch (e) { if (e.name !== "AbortError") { av.textContent = "Não foi possível usar a pasta: " + e.message; av.classList.remove("oculto"); } }
+};
 $("fPdfRem").onclick = () => { pdfAtual = ""; mostrarPdf(); };
 $("fPdfArq").onchange = async ev => {
   const f = ev.target.files[0]; ev.target.value = ""; if (!f) return;
@@ -846,7 +854,8 @@ $("fPdfArq").onchange = async ev => {
   if (f.size > 40 * 1024 * 1024) { av.textContent = "PDF com mais de 40 MB; reduza o arquivo antes (o GitHub recusa arquivos muito grandes)."; av.classList.remove("oculto"); return; }
   if ("showDirectoryPicker" in window) {
     try {
-      const dir = await (await obterPasta()).getDirectoryHandle("trabalhos", { create: true });
+      if (!pastaRepo) throw new Error("pasta do repositório não definida; clique em Escolher PDF de novo");
+      const dir = await pastaRepo.getDirectoryHandle("trabalhos", { create: true });
       const w = await (await dir.getFileHandle(nome, { create: true })).createWritable(); await w.write(f); await w.close();
       pdfAtual = "trabalhos/" + nome; mostrarPdf();
       av.textContent = "PDF copiado para trabalhos/" + nome + ". Grave a defesa e rode o publicar.sh para enviá-lo."; av.classList.remove("oculto");
