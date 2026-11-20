@@ -24,11 +24,11 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda 
 
 ## Publicação
 
-`./publicar.sh` copia o arquivo de trabalho para `agenda.json` sem o log e sem o motivo das indisponibilidades, valida com `build.py --verificar` e faz o push. A Action roda `build.py`, que valida de novo e monta o site em `_site/` com os calendários (`ics/`) e as páginas de cada defesa (`d/`). Se a agenda tiver algum problema (defesa fora do horário, em fim de semana, professor inexistente, log não vazio), nada é publicado.
+O arquivo de trabalho é o próprio `agenda.json` do repositório. `./publicar.sh` valida a agenda com `build.py --verificar` e faz commit e push do `agenda.json` e dos PDFs em `trabalhos/`. A Action roda `build.py`, que valida de novo e monta o site em `_site/` com os calendários (`ics/`) e as páginas de cada defesa (`d/`). A cópia publicada no site sai sem o log e sem os motivos das indisponibilidades, mas eles ficam visíveis no `agenda.json` do repositório. Se a agenda tiver algum problema (defesa fora do horário, em fim de semana, professor inexistente, PDF ausente), nada é publicado.
 
 ## Privacidade
 
-O JSON da agenda tem nomes de alunos, títulos e bancas. Ele não deve ser publicado: o `.gitignore` já ignora `*.json`. Os dados que vêm na página são apenas fictícios, para teste.
+O `agenda.json` tem nomes de alunos, títulos, bancas, o log de alterações e os motivos das indisponibilidades, e fica público no repositório (o site esconde o log e os motivos, o repositório não). Os PDFs em `trabalhos/` também são públicos e permanecem no histórico do Git. Os dados embutidos no `index.html`, usados quando nenhuma agenda é carregada, são fictícios, para teste.
 
 ## Licença e créditos
 

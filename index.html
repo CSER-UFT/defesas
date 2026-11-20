@@ -115,6 +115,8 @@
   @media print { header, .abas, .chips, .toolbar, .dica, #status { display:none !important; } .editando .dia { cursor:auto; } }
   a.bt { display:inline-block; font-size:.88rem; padding:6px 12px; border:1px solid var(--bord); border-radius:8px; color:var(--azul); text-decoration:none; background:#fff; }
   a.bt:hover { background:var(--cinza); }
+  a.bt.pri { background:var(--azul); color:#fff; border-color:var(--azul); }
+  a.bt.pri:hover { background:#255ccb; }
   .itemDia a { color:var(--azul); margin-right:12px; font-size:.8rem; }
   .listaDias h2 { margin:18px 0 6px; font-size:.9rem; color:var(--mut); }
   .listaDias h2.hoje { color:var(--azul); }
@@ -301,11 +303,16 @@ function rotuloLink(u) { return /meet\.google\.com|zoom\.us|teams\.microsoft/.te
 function linksDefesa(d) {
   const out = [], s = salaDe(d);
   if (s && s.link) out.push([rotuloLink(s.link), s.link]);
-  if (d.pdf) out.push(["Trabalho (PDF)", d.pdf]);
+  if (d.pdf) out.push(["Baixar o TCC (PDF)", d.pdf, true]);
   return out;
 }
 function anchors(d, cls) {
-  return linksDefesa(d).map(([t, u]) => { const a = document.createElement("a"); a.href = u; a.target = "_blank"; a.rel = "noopener"; a.textContent = t; if (cls) a.className = cls; a.onclick = ev => ev.stopPropagation(); return a; });
+  return linksDefesa(d).map(([t, u, pdf]) => {
+    const a = document.createElement("a"); a.href = u; a.textContent = t; a.onclick = ev => ev.stopPropagation();
+    if (pdf) a.download = u.split("/").pop(); else { a.target = "_blank"; a.rel = "noopener"; }
+    if (cls) a.className = cls + (pdf ? " pri" : "");
+    return a;
+  });
 }
 function linkDefesa(d) { return baseSite() + "d/" + idSeguro(d.id) + ".html"; }
 function linkIcs(pid) { const pr = pid ? prof(pid) : null; return baseSite() + "ics/" + (pr ? profSlug(pr) : "todas") + ".ics"; }

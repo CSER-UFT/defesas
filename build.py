@@ -200,7 +200,7 @@ def pagina_defesa(ag, d):
 </body></html>
 """.format(t=e(titulo), d=e(desc), u=e(URL + "d/" + id_seguro(d["id"]) + ".html"), r=e(destino), rj=json.dumps(destino),
                x="".join(' · <a href="%s">%s</a>' % (e(u), e(t)) for t, u in (
-                   (("Entrar na videoconferência" if i["remoto"] else "Ver no mapa"), i["link"]), ("Trabalho (PDF)", i["pdf"])) if u))
+                   (("Entrar na videoconferência" if i["remoto"] else "Ver no mapa"), i["link"]), ("Baixar o TCC (PDF)", i["pdf"])) if u))
 
 
 def main():
