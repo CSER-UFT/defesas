@@ -15,7 +15,14 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, de segunda 
 - Card de divulgação em PNG (1080x1080) com paleta sorteada.
 - Atas e fichas de avaliação em PDF, em um ZIP, para uma defesa ou para um período.
 - Impressão em planilha e exportação em CSV.
+- Calendário assinável: o botão **Calendário** copia o endereço do `.ics` (de um professor, ou de todas as defesas) para assinar no Google Agenda (Outras agendas, +, Do URL), Outlook ou celular. Os calendários são gerados a cada publicação e o aplicativo de agenda atualiza sozinho.
+- Link de uma defesa: no card de divulgação, **Copiar link** gera `d/<id>.html`, que mostra aluno, data e local na prévia do WhatsApp e abre a agenda com o card da defesa.
+- No celular, a semana aparece como lista por dia, com os horários livres do professor filtrado.
 - Agenda de um professor por link: escolha **Agenda de ...** na tela e clique em **Copiar link**. O link tem a forma `?prof=tiago_almeida` (nome curto do professor), abre só as defesas dele com os horários livres em verde, e a impressão, o CSV e o ZIP passam a seguir o mesmo filtro.
+
+## Publicação
+
+`./publicar.sh` copia o arquivo de trabalho para `agenda.json` sem o log e sem o motivo das indisponibilidades, valida com `build.py --verificar` e faz o push. A Action roda `build.py`, que valida de novo e monta o site em `_site/` com os calendários (`ics/`) e as páginas de cada defesa (`d/`). Se a agenda tiver algum problema (defesa fora do horário, em fim de semana, professor inexistente, log não vazio), nada é publicado.
 
 ## Privacidade
 
@@ -23,4 +30,4 @@ O JSON da agenda tem nomes de alunos, títulos e bancas. Ele não deve ser publi
 
 ## Licença e créditos
 
-CSER UFT. A biblioteca pdf-lib (MIT) está embutida no `index.html` para gerar os PDFs sem depender da internet.
+CSER UFT. A biblioteca pdf-lib (MIT) e o logo das atas ficam em `pdflib_recursos.js`, carregado só quando um PDF é gerado; os PDFs continuam saindo sem depender da internet, desde que o arquivo esteja na mesma pasta do `index.html`.

@@ -5,3 +5,6 @@
 # Somente a cópia pública da agenda (sem o log) é publicada
 *.json
 !agenda.json
+# Site montado pelo build.py
+_site/
+__pycache__/
