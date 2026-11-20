@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795211889124,
+  "salvoEm": 1795212302282,
   "config": {
     "titulo": "AGENDA DE DEFESAS DE TCC",
     "subtitulo": "",
@@ -57,12 +57,14 @@
     {
       "id": "smwmwvhj3fyv",
       "nome": "LABTEC",
-      "curto": "LABTEC"
+      "curto": "LABTEC",
+      "link": "https://maps.app.goo.gl/oHdnvQ9tr4amd38r7"
     },
     {
       "id": "smwmwvra0hcv",
       "nome": "Remoto",
-      "curto": "Remoto"
+      "curto": "Remoto",
+      "link": "https://meet.google.com/bjm-pzec-rni"
     }
   ],
   "alunos": [
@@ -405,6 +407,16 @@
       "ts": 1795211888523,
       "tipo": "defesa",
       "texto": "Defesa de «Gabriel Fernandes Zamora» em 02/12/2026 excluída."
+    },
+    {
+      "ts": 1795212246725,
+      "tipo": "sala",
+      "texto": "Link da sala «LABTEC» atualizado."
+    },
+    {
+      "ts": 1795212288413,
+      "tipo": "sala",
+      "texto": "Link da sala «Remoto» atualizado."
     }
   ]
 }
