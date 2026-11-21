@@ -252,9 +252,9 @@ def main():
     for p in a["professores"]:
         ds = [d for d in ordem if ag.participa(d, p["id"])]
         with open(os.path.join(site, "ics", slug(p.get("curto") or p["nome"]) + ".ics"), "w", encoding="utf-8", newline="") as f:
-            f.write(ics(ag, ds, "Defesas de TCC: " + (p.get("curto") or p["nome"]), agora))
+            f.write(ics(ag, ds, "Defesas: " + (p.get("curto") or p["nome"]), agora))
     with open(os.path.join(site, "ics", "todas.ics"), "w", encoding="utf-8", newline="") as f:
-        f.write(ics(ag, ordem, "Defesas de TCC", agora))
+        f.write(ics(ag, ordem, "Defesas", agora))
     for d in a["defesas"]:
         with open(os.path.join(site, "d", id_seguro(d["id"]) + ".html"), "w", encoding="utf-8") as f:
             f.write(pagina_defesa(ag, d))

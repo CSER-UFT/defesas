@@ -1,4 +1,4 @@
-# Agenda de defesas de TCC
+# Agenda de defesas
 
 Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, e qualificações e defesas de mestrado e doutorado, de segunda a sexta, das 08:00 às 18:00, com início de 15 em 15 minutos e duração livre. Não usa servidor nem banco de dados: os dados ficam em um arquivo JSON no seu computador.
 
