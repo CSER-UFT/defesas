@@ -947,7 +947,7 @@ function infoCard(d) {
     aluno: al.nome, titulo: (d.titulo || "A definir").toUpperCase(),
     orientador: o ? o.nome : "", coorientador: co ? co.nome : "",
     data: dt.getDate() + " de " + MESES[dt.getMonth()] + " às " + h + "h" + (m ? pad(m) : ""),
-    local: sala ? sala.nome : "A definir"
+    local: sala ? sala.nome + (sala.link && rotuloLink(sala.link) === "Entrar na videoconferência" ? ": " + sala.link.replace(/^https?:\/\//, "") : "") : "A definir"
   };
 }
 function quebrarTexto(segs, maxChars) {
@@ -1013,7 +1013,8 @@ function desenharCard(cv, info, pal) {
   const f30 = "30px " + FONTE, a30 = adv(30);
   texto("$ ", 75, 854, f30, P("promptgreen")); texto("python defesa_tcc.py", 75 + 2 * a30, 854, f30, P("codepunct"));
   texto(">>> ", 75, 913, f30, P("linenum")); texto(info.data, 75 + 4 * a30, 913, f30, P("codeaccent"));
-  texto(">>> ", 75, 961, f30, P("linenum")); texto(info.local, 75 + 4 * a30, 961, f30, P("codeaccent"));
+  let fl = 30; while (fl > 18 && (4 + info.local.length) * adv(fl) > 930) fl--;
+  texto(">>> ", 75, 961, fl + "px " + FONTE, P("linenum")); texto(info.local, 75 + 4 * adv(fl), 961, fl + "px " + FONTE, P("codeaccent"));
   texto("$ ", 75, 1018, f30, P("promptgreen"));
   c.fillStyle = P("codepunct"); c.fillRect(109, 994, 16, 27);
 
