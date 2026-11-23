@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795442849178,
+  "salvoEm": 1795461535406,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -261,7 +261,8 @@
         "p3",
         "p4",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261130_pedro_lucas_moreira_pinto.pdf"
     },
     {
       "id": "dmwnnetqad9a",
@@ -404,9 +405,9 @@
   ],
   "log": [
     {
-      "ts": 1795442837225,
+      "ts": 1795461528523,
       "tipo": "defesa",
-      "texto": "Defesa de «Lucas Gabriel Costa Farias» (TCC1) em 03/12/2026 às 10:15 por 40 min."
+      "texto": "Defesa de «Pedro Lucas Moreira Pinto» (TCC1) em 30/11/2026 às 09:30 por 40 min."
     }
   ]
 }
