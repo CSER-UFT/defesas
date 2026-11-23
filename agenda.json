@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795461535406,
+  "salvoEm": 1795461662220,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -326,12 +326,13 @@
       "data": "03/12/2026",
       "inicio": "09:30",
       "duracao": 40,
-      "salaId": null,
+      "salaId": "smwmwvhj3fyv",
       "bancaIds": [
         "pmwmwsgtt6zb",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261203_gabriel_barbosa_dos_santos_martiliano.pdf"
     },
     {
       "id": "dmwnnpgehzdz",
@@ -348,8 +349,7 @@
         "pmwmwsgtt6zb",
         "p1",
         "p2"
-      ],
-      "pdf": "trabalhos/20261203_lucas_gabriel_costa_farias.pdf"
+      ]
     }
   ],
   "indisponibilidades": [
@@ -408,6 +408,21 @@
       "ts": 1795461528523,
       "tipo": "defesa",
       "texto": "Defesa de «Pedro Lucas Moreira Pinto» (TCC1) em 30/11/2026 às 09:30 por 40 min."
+    },
+    {
+      "ts": 1795461573939,
+      "tipo": "defesa",
+      "texto": "Defesa de «Lucas Gabriel Costa Farias» (TCC1) em 03/12/2026 às 10:15 por 40 min."
+    },
+    {
+      "ts": 1795461652508,
+      "tipo": "defesa",
+      "texto": "Defesa de «Gabriel Barbosa dos Santos Martiliano» (TCC1) em 03/12/2026 às 09:30 por 40 min."
+    },
+    {
+      "ts": 1795461659818,
+      "tipo": "defesa",
+      "texto": "Defesa de «Lucas Gabriel Costa Farias» (TCC1) em 03/12/2026 às 10:15 por 40 min."
     }
   ]
 }
