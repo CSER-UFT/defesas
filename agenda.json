@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795521189681,
+  "salvoEm": 1795533797870,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -315,7 +315,8 @@
         "pmwmwsgtt6zb",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261203_mayconn_cardoso_soares.pdf"
     },
     {
       "id": "dmwnnjoe8xpb",
@@ -406,9 +407,9 @@
   ],
   "log": [
     {
-      "ts": 1795521185079,
+      "ts": 1795533794714,
       "tipo": "defesa",
-      "texto": "Defesa de «Neci Mendes Fialho» (TCC2) em 03/12/2026 às 08:00 por 40 min."
+      "texto": "Defesa de «Mayconn Cardoso Soares» (TCC2) em 03/12/2026 às 08:45 por 40 min."
     }
   ]
 }
