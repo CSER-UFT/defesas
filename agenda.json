@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795533797870,
+  "salvoEm": 1795655774536,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -351,7 +351,8 @@
         "pmwmwsgtt6zb",
         "p1",
         "p2"
-      ]
+      ],
+      "pdf": "trabalhos/20261203_lucas_gabriel_costa_farias.pdf"
     }
   ],
   "indisponibilidades": [
@@ -407,9 +408,9 @@
   ],
   "log": [
     {
-      "ts": 1795533794714,
+      "ts": 1795655762531,
       "tipo": "defesa",
-      "texto": "Defesa de «Mayconn Cardoso Soares» (TCC2) em 03/12/2026 às 08:45 por 40 min."
+      "texto": "Defesa de «Lucas Gabriel Costa Farias» (TCC1) em 03/12/2026 às 10:15 por 40 min."
     }
   ]
 }
