@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795807875176,
+  "salvoEm": 1795808054455,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -55,14 +55,14 @@
     {
       "id": "pmwzdfrustl5",
       "nome": "Thiago Magalhães de Brito Rodrigues",
-      "curto": "Thiago Magalhães de Brito Rodrigues",
+      "curto": "Thiago Magalhães",
       "trat": "Prof.",
       "grau": "Me."
     },
     {
       "id": "pmwzdg8i579l",
       "nome": "Jackson Gomes de Souza",
-      "curto": "Jackson Gomes de Souza",
+      "curto": "Jackson Gomes",
       "trat": "Prof.",
       "grau": "Dr."
     }
@@ -650,6 +650,16 @@
       "ts": 1795807855968,
       "tipo": "defesa",
       "texto": "Defesa de «Thiago Galvão Amorim» (TCC1) em 04/12/2026 às 10:30 por 40 min."
+    },
+    {
+      "ts": 1795808030643,
+      "tipo": "professor",
+      "texto": "Professor «Thiago Magalhães de Brito Rodrigues» atualizado."
+    },
+    {
+      "ts": 1795808043940,
+      "tipo": "professor",
+      "texto": "Professor «Jackson Gomes de Souza» atualizado."
     }
   ]
 }
