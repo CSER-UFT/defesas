@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795808054455,
+  "salvoEm": 1795808195601,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -511,7 +511,7 @@
       "data": "04/12/2026",
       "inicio": "10:30",
       "duracao": 40,
-      "salaId": null,
+      "salaId": "smwmwvhj3fyv",
       "bancaIds": [
         "p3",
         "pmwzdg8i579l",
@@ -660,6 +660,11 @@
       "ts": 1795808043940,
       "tipo": "professor",
       "texto": "Professor «Jackson Gomes de Souza» atualizado."
+    },
+    {
+      "ts": 1795808193361,
+      "tipo": "defesa",
+      "texto": "Defesa de «Thiago Galvão Amorim» (TCC1) em 04/12/2026 às 10:30 por 40 min."
     }
   ]
 }
