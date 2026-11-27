@@ -2,7 +2,7 @@
   "formato": "agendatcc",
   "schema": 1,
   "nome": "Agenda de TCC",
-  "salvoEm": 1795655774536,
+  "salvoEm": 1795807875176,
   "config": {
     "titulo": "AGENDA DE DEFESAS",
     "subtitulo": "",
@@ -51,6 +51,20 @@
       "nome": "Felipe Sousa Barbosa",
       "curto": "Felipe Barbosa",
       "grau": "Bel."
+    },
+    {
+      "id": "pmwzdfrustl5",
+      "nome": "Thiago Magalhães de Brito Rodrigues",
+      "curto": "Thiago Magalhães de Brito Rodrigues",
+      "trat": "Prof.",
+      "grau": "Me."
+    },
+    {
+      "id": "pmwzdg8i579l",
+      "nome": "Jackson Gomes de Souza",
+      "curto": "Jackson Gomes de Souza",
+      "trat": "Prof.",
+      "grau": "Dr."
     }
   ],
   "salas": [
@@ -169,6 +183,54 @@
       "orientadorId": "p2",
       "coorientadorId": null,
       "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwzdh3gpcgo",
+      "nome": "HELOISA ROLINS RIBEIRO",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwzdhg62uc4",
+      "nome": "HENRIQUE NORONHA FERNANDES",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwzdhrn8e0k",
+      "nome": "WILQUE MURIEL DO NASCIMENTO COELHO",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": "TCC2",
+      "concluido": false
+    },
+    {
+      "id": "amwzdi7ctmz",
+      "nome": "Laura Barbosa Henrique Desenhando",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwzdigw8jax",
+      "nome": "LAURO OLIVEIRA MOTA",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": null,
+      "concluido": false
+    },
+    {
+      "id": "amwzdipx71rm",
+      "nome": "Thiago Galvão Amorim",
+      "orientadorId": "p3",
+      "coorientadorId": null,
+      "faseManual": null,
       "concluido": false
     }
   ],
@@ -353,6 +415,108 @@
         "p2"
       ],
       "pdf": "trabalhos/20261203_lucas_gabriel_costa_farias.pdf"
+    },
+    {
+      "id": "dmwzdjuezhwj",
+      "alunoId": "amwzdh3gpcgo",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "PROPOSTA DE FORMALIZAÇÃO DE UMA ABORDAGEM HÍBRIDA PARA O ENSINO DE ENGENHARIA DE SOFTWARE BASEADA EM METODOLOGIAS ÁGEIS E ATIVAS",
+      "data": "02/12/2026",
+      "inicio": "08:30",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p3",
+        "pmwzdfrustl5"
+      ]
+    },
+    {
+      "id": "dmwzdkfg8iu6",
+      "alunoId": "amwzdhg62uc4",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "PLAYLINE: UMA ARQUITETURA CLIENTE-SERVIDOR DESACOPLADA PARA AUTOMAÇÃO DE PLAYOUT TELEVISIVO",
+      "data": "02/12/2026",
+      "inicio": "09:30",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p3",
+        "pmwzdfrustl5"
+      ]
+    },
+    {
+      "id": "dmwzdkyii9n4",
+      "alunoId": "amwzdhrn8e0k",
+      "fases": [
+        "TCC2"
+      ],
+      "titulo": "UTILIZAÇÃO DE SISTEMAS LINUX EM TV BOXES APREENDIDAS PARA CRIAÇÃO DE UM CLUSTER KUBERNETES EM AMBIENTE DE EDGE COMPUTING",
+      "data": "02/12/2026",
+      "inicio": "10:30",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "pmwmwsgtt6zb",
+        "p3",
+        "pmwzdfrustl5"
+      ]
+    },
+    {
+      "id": "dmwzdlw7yrs0",
+      "alunoId": "amwzdi7ctmz",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "DESENHANDO A PRIMEIRA IMPRESSÃO: UM MODELO DE INTERFACE PARA O ONBOARDING DE ADULTOS COM TDAH A PARTIR DA ANÁLISE DO KRITA",
+      "data": "04/12/2026",
+      "inicio": "08:30",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "p3",
+        "pmwzdg8i579l",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwzdmc1f4be",
+      "alunoId": "amwzdigw8jax",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "Modelo de custódia verificável para históricos de localização: completude e sigilo diante de fontes adversárias",
+      "data": "04/12/2026",
+      "inicio": "09:30",
+      "duracao": 40,
+      "salaId": "smwmwvhj3fyv",
+      "bancaIds": [
+        "p3",
+        "pmwzdg8i579l",
+        "p2"
+      ]
+    },
+    {
+      "id": "dmwzdmpuok4g",
+      "alunoId": "amwzdipx71rm",
+      "fases": [
+        "TCC1"
+      ],
+      "titulo": "Sentinel: Uma Arquitetura de Negociação Algorítmica Baseada em Métricas de Vitalidade On-Chain e Filtros de Risco",
+      "data": "04/12/2026",
+      "inicio": "10:30",
+      "duracao": 40,
+      "salaId": null,
+      "bancaIds": [
+        "p3",
+        "pmwzdg8i579l",
+        "p2"
+      ]
     }
   ],
   "indisponibilidades": [
@@ -408,9 +572,84 @@
   ],
   "log": [
     {
-      "ts": 1795655762531,
+      "ts": 1795807531972,
+      "tipo": "professor",
+      "texto": "Professor «Thiago Magalhães de Brito Rodrigues» cadastrado."
+    },
+    {
+      "ts": 1795807553549,
+      "tipo": "professor",
+      "texto": "Professor «Jackson Gomes de Souza» cadastrado."
+    },
+    {
+      "ts": 1795807593673,
+      "tipo": "aluno",
+      "texto": "Aluno «HELOISA ROLINS RIBEIRO» cadastrado."
+    },
+    {
+      "ts": 1795807610138,
+      "tipo": "aluno",
+      "texto": "Aluno «HENRIQUE NORONHA FERNANDES» cadastrado."
+    },
+    {
+      "ts": 1795807625012,
+      "tipo": "aluno",
+      "texto": "Aluno «WILQUE MURIEL DO NASCIMENTO COELHO» cadastrado."
+    },
+    {
+      "ts": 1795807645373,
+      "tipo": "aluno",
+      "texto": "Aluno «Laura Barbosa Henrique Desenhando» cadastrado."
+    },
+    {
+      "ts": 1795807657736,
+      "tipo": "aluno",
+      "texto": "Aluno «LAURO OLIVEIRA MOTA» cadastrado."
+    },
+    {
+      "ts": 1795807669435,
+      "tipo": "aluno",
+      "texto": "Aluno «Thiago Galvão Amorim» cadastrado."
+    },
+    {
+      "ts": 1795807721915,
       "tipo": "defesa",
-      "texto": "Defesa de «Lucas Gabriel Costa Farias» (TCC1) em 03/12/2026 às 10:15 por 40 min."
+      "texto": "Defesa de «HELOISA ROLINS RIBEIRO» (TCC2) em 02/12/2026 às 08:30 por 40 min."
+    },
+    {
+      "ts": 1795807749176,
+      "tipo": "defesa",
+      "texto": "Defesa de «HENRIQUE NORONHA FERNANDES» (TCC2) em 02/12/2026 às 09:30 por 40 min."
+    },
+    {
+      "ts": 1795807773882,
+      "tipo": "defesa",
+      "texto": "Defesa de «WILQUE MURIEL DO NASCIMENTO COELHO» (TCC2) em 02/12/2026 às 10:30 por 40 min."
+    },
+    {
+      "ts": 1795807777348,
+      "tipo": "defesa",
+      "texto": "Defesa de «HENRIQUE NORONHA FERNANDES» (TCC2) em 02/12/2026 às 09:30 por 40 min."
+    },
+    {
+      "ts": 1795807780618,
+      "tipo": "defesa",
+      "texto": "Defesa de «HELOISA ROLINS RIBEIRO» (TCC2) em 02/12/2026 às 08:30 por 40 min."
+    },
+    {
+      "ts": 1795807817567,
+      "tipo": "defesa",
+      "texto": "Defesa de «Laura Barbosa Henrique Desenhando» (TCC1) em 04/12/2026 às 08:30 por 40 min."
+    },
+    {
+      "ts": 1795807838068,
+      "tipo": "defesa",
+      "texto": "Defesa de «LAURO OLIVEIRA MOTA» (TCC1) em 04/12/2026 às 09:30 por 40 min."
+    },
+    {
+      "ts": 1795807855968,
+      "tipo": "defesa",
+      "texto": "Defesa de «Thiago Galvão Amorim» (TCC1) em 04/12/2026 às 10:30 por 40 min."
     }
   ]
 }
