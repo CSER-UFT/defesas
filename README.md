@@ -13,7 +13,7 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, e qualifica
 - Níveis: cada aluno é de graduação (TCC), mestrado ou doutorado. Na grade, a cor indica o nível (azul TCC, laranja mestrado, roxo doutorado), o selo indica a etapa (T1, T2, T1+2, Q, D) e a borda tracejada marca a primeira etapa (TCC1 ou qualificação). Atas e fichas em PDF, por enquanto, só para TCC.
 - Fase automática: o aluno passa para TCC 2 no dia seguinte à defesa de TCC 1, com ajuste manual e defesa combinada (TCC 1 e 2).
 - Conflitos de banca, sala e indisponibilidade sinalizados em vermelho, e horários livres em comum entre professores.
-- Card de divulgação em PNG (1080x1080) com paleta sorteada.
+- Card de divulgação em PNG (1080x1080) em 17 modelos, sorteados ao abrir e escolhidos no diálogo: código Python (com paletas), datasheet, diagrama de tempo, relatório de síntese, mapa de memória, diagnóstico do gcc, AST, assembly RISC-V, pipeline, banco de registradores, systemctl, htop, tradução de endereço, certificado X.509, autômato, Jupyter e JSON. Os modelos se ajustam a nomes e títulos longos, à falta de coorientador e às etapas de TCC, mestrado e doutorado.
 - Atas e fichas de avaliação em PDF, em um ZIP, para uma defesa ou para um período.
 - Impressão em planilha e exportação em CSV.
 - Calendário assinável: o botão **Calendário** copia o endereço do `.ics` (de um professor, ou de todas as defesas) para assinar no Google Agenda (Outras agendas, +, Do URL), Outlook ou celular. Os calendários são gerados a cada publicação e o aplicativo de agenda atualiza sozinho.
@@ -33,4 +33,4 @@ O `agenda.json` tem nomes de alunos, títulos, bancas, o log de alterações e o
 
 ## Licença e créditos
 
-CSER UFT. A biblioteca pdf-lib (MIT) e o logo das atas ficam em `pdflib_recursos.js`, carregado só quando um PDF é gerado; os PDFs continuam saindo sem depender da internet, desde que o arquivo esteja na mesma pasta do `index.html`.
+CSER UFT. Os modelos de card ficam em `cards.js`, e as fontes JetBrains Mono e IBM Plex Sans (SIL Open Font License 1.1), em subconjunto latino WOFF2, ficam em `fontes_cards.js`, carregado só quando um card é aberto. A biblioteca pdf-lib (MIT) e o logo das atas ficam em `pdflib_recursos.js`, carregado só quando um PDF é gerado; os PDFs continuam saindo sem depender da internet, desde que o arquivo esteja na mesma pasta do `index.html`.

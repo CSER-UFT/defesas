@@ -203,7 +203,7 @@
   <h3>Card de divulgação</h3>
   <canvas id="cvCard" width="1080" height="1080"></canvas>
   <div class="form1" id="cdLinks"></div>
-  <div class="form1"><label>Paleta <select id="cdPaleta"></select></label><button type="button" id="cdSortear">Sortear outra</button></div>
+  <div class="form1"><label>Modelo <select id="cdModelo"></select></label><label id="cdPalLbl">Paleta <select id="cdPaleta"></select></label><button type="button" id="cdSortear">Sortear outro</button></div>
   <div class="acoes"><button type="button" id="cdFechar">Fechar</button><button type="button" id="cdLink">Copiar link</button><button type="button" id="cdZip">Atas e fichas (ZIP de PDFs)</button><button type="button" id="cdBaixar" class="pri">Baixar PNG</button></div>
 </dialog>
 
@@ -947,7 +947,30 @@ function infoCard(d) {
     aluno: al.nome, titulo: (d.titulo || "A definir").toUpperCase(),
     orientador: o ? o.nome : "", coorientador: co ? co.nome : "",
     data: dt.getDate() + " de " + MESES[dt.getMonth()] + " às " + h + "h" + (m ? pad(m) : ""),
-    local: sala ? sala.nome + (sala.link && rotuloLink(sala.link) === "Entrar na videoconferência" ? ": " + sala.link.replace(/^https?:\/\//, "") : "") : "A definir"
+    local: sala ? sala.nome + (sala.link && rotuloLink(sala.link) === "Entrar na videoconferência" ? ": " + sala.link.replace(/^https?:\/\//, "") : "") : "A definir",
+    ...etapaCard(d, al, dt),
+    orientadorCurto: o ? (o.curto || o.nome) : "", coorientadorCurto: co ? (co.curto || co.nome) : ""
+  };
+}
+// campos de etapa usados como decoração nos modelos de card (cards.js)
+function etapaCard(d, al, dt) {
+  const ano = dt.getFullYear();
+  if (ehPos(al)) {
+    const qual = d.fases[0] === "QUAL", nv = nivel(al), Nv = NIVEIS[nv];
+    return {
+      tag: Nv.toUpperCase(), tagCompacta: nv === "mestrado" ? "MSC" : "DSC", tagSlug: nv, ano: ano,
+      num: (nv === "mestrado" ? 4 : 6) + (qual ? 0 : 1), comando: (qual ? "qualificacao" : "defesa") + " --" + nv,
+      rotuloCurto: (qual ? "Qualificação de " : "Defesa de ") + nv,
+      automato: { estados: ["Qualif.", "Defesa", "aprovado"], arestas: ["aprovação", "defesa"], atual: qual ? 0 : 1 },
+      jsonEtapa: [["nivel", '"' + nv + '"'], ["etapa", qual ? '"qualificação"' : '"defesa"']]
+    };
+  }
+  const dupla = d.fases.length === 2, n = dupla ? 3 : Number(d.fases[0].replace("TCC", ""));
+  return {
+    tag: dupla ? "TCC 1 e 2" : "TCC " + n, tagCompacta: dupla ? "TCC1+2" : "TCC" + n, tagSlug: dupla ? "tcc1e2" : "tcc" + n, ano: ano,
+    num: n, comando: "defesa --tcc " + (dupla ? "1,2" : n), rotuloCurto: "Defesa de TCC " + (dupla ? "1 e 2" : n),
+    automato: { estados: ["TCC 1", "TCC 2", "aprovado"], arestas: ["aprovação", "defesa"], atual: n === 1 ? 0 : 1 },
+    jsonEtapa: [["tcc", dupla ? "[1, 2]" : String(n)]]
   };
 }
 function quebrarTexto(segs, maxChars) {
@@ -1031,25 +1054,61 @@ function paletaAleatoria(exceto) {
   const nomes = Object.keys(PALETAS).filter(n => n !== exceto);
   return nomes[Math.floor(Math.random() * nomes.length)];
 }
-function redesenharCard() { if (cardDefesa) desenharCard($("cvCard"), infoCard(cardDefesa), PALETAS[$("cdPaleta").value]); }
-function abrirCard(d) {
+// Modelos: "python" é o card de código desenhado acima; os demais vêm de cards.js (carregado sob demanda)
+let cardsPronto = null;
+function carregarScript(src) {
+  return new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = src; sc.onload = res; sc.onerror = () => rej(new Error("não foi possível carregar " + src + " (ele precisa estar na mesma pasta do index.html)")); document.head.append(sc); });
+}
+function carregarCards() {
+  if (window.CARDS) return CARDS.carregarFontes();
+  if (!cardsPronto) cardsPronto = carregarScript("fontes_cards.js").then(() => carregarScript("cards.js")).then(() => CARDS.carregarFontes())
+    .catch(e => { cardsPronto = null; throw e; });
+  return cardsPronto;
+}
+function modelosCard() { return [{ id: "python", nome: "Código Python (paletas)" }].concat(window.CARDS ? CARDS.modelos : []); }
+function preencherModelos() {
+  const sel = $("cdModelo"), atual = sel.value;
+  sel.textContent = "";
+  modelosCard().forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.nome; sel.append(o); });
+  if (atual && [...sel.options].some(o => o.value === atual)) sel.value = atual;
+}
+function modeloAleatorio(exceto) {
+  const ids = modelosCard().map(m => m.id).filter(i => i !== exceto);
+  return ids[Math.floor(Math.random() * ids.length)];
+}
+let versaoCard = 0;
+async function redesenharCard() {
+  if (!cardDefesa) return;
+  const m = $("cdModelo").value || "python", v = ++versaoCard, info = infoCard(cardDefesa);
+  $("cdPalLbl").classList.toggle("oculto", m !== "python");
+  if (m === "python") { desenharCard($("cvCard"), info, PALETAS[$("cdPaleta").value]); return; }
+  try { await carregarCards(); } catch (e) { $("status").textContent = "Card: " + e.message; $("cdModelo").value = "python"; return redesenharCard(); }
+  if (v !== versaoCard) return;
+  // os modelos novos usam os nomes curtos dos professores, como nos cards em LaTeX
+  CARDS.desenhar($("cvCard"), m, Object.assign({}, info, { orientador: info.orientadorCurto, coorientador: info.coorientadorCurto }));
+}
+async function abrirCard(d) {
   cardDefesa = d;
   const sel = $("cdPaleta");
   if (!sel.options.length) Object.keys(PALETAS).forEach(n => { const o = document.createElement("option"); o.value = n; o.textContent = n; sel.append(o); });
   sel.value = paletaAleatoria(null);
+  try { await carregarCards(); } catch (e) { $("status").textContent = "Card: " + e.message; }
+  preencherModelos();
+  $("cdModelo").value = modeloAleatorio(null);
   const cl = $("cdLinks"); cl.textContent = ""; cl.append(...anchors(d, "bt")); cl.classList.toggle("oculto", !cl.childNodes.length);
   $("cdZip").classList.toggle("oculto", ehPos(aluno(d.alunoId)));
   redesenharCard(); $("dlgCard").showModal();
 }
 $("cdPaleta").onchange = redesenharCard;
-$("cdSortear").onclick = () => { $("cdPaleta").value = paletaAleatoria($("cdPaleta").value); redesenharCard(); };
+$("cdModelo").onchange = redesenharCard;
+$("cdSortear").onclick = () => { $("cdModelo").value = modeloAleatorio($("cdModelo").value); $("cdPaleta").value = paletaAleatoria($("cdPaleta").value); redesenharCard(); };
 $("cdZip").onclick = () => { const d = cardDefesa; $("dlgCard").close(); gerarZip([d], aaaammdd(d.data) + "_" + slug((aluno(d.alunoId) || { nome: "aluno" }).nome)); };
 $("cdFechar").onclick = () => $("dlgCard").close();
 $("cdLink").onclick = () => { if (cardDefesa) copiar(linkDefesa(cardDefesa), "Link da defesa copiado (a prévia aparece depois de publicar): "); };
 $("cdBaixar").onclick = () => {
   const al = (aluno(cardDefesa.alunoId) || { nome: "aluno" }).nome;
   const slug = al.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-  $("cvCard").toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "card_defesa_" + slug + ".png"; a.click(); }, "image/png");
+  $("cvCard").toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "card_defesa_" + slug + "_" + ($("cdModelo").value || "python") + ".png"; a.click(); }, "image/png");
 };
 $("fZip").onclick = () => { const d = data.defesas.find(x => x.id === editDefesaId); if (d) gerarZip([d], aaaammdd(d.data) + "_" + slug((aluno(d.alunoId) || { nome: "aluno" }).nome)); };
 $("fCard").onclick = () => { const d = data.defesas.find(x => x.id === editDefesaId); if (d) { $("dlgDefesa").close(); abrirCard(d); } };

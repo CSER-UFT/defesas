@@ -22,7 +22,7 @@ import unicodedata
 
 URL = "https://cser-uft.github.io/defesas/"
 FUSO = dt.timezone(dt.timedelta(hours=-3))  # Palmas (America/Araguaina), sem horário de verão
-ARQUIVOS = ["index.html", "agenda.json", "pdflib_recursos.js"]
+ARQUIVOS = ["index.html", "agenda.json", "pdflib_recursos.js", "cards.js", "fontes_cards.js"]
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
          "agosto", "setembro", "outubro", "novembro", "dezembro"]
 
