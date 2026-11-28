@@ -15,6 +15,7 @@ Página única (`index.html`) para agendar defesas de TCC 1 e TCC 2, e qualifica
 - Conflitos de banca, sala e indisponibilidade sinalizados em vermelho, e horários livres em comum entre professores.
 - Card de divulgação em PNG (1080x1080) em 17 modelos, sorteados ao abrir e escolhidos no diálogo: código Python (com paletas), datasheet, diagrama de tempo, relatório de síntese, mapa de memória, diagnóstico do gcc, AST, assembly RISC-V, pipeline, banco de registradores, systemctl, htop, tradução de endereço, certificado X.509, autômato, Jupyter e JSON. Os modelos se ajustam a nomes e títulos longos, à falta de coorientador e às etapas de TCC, mestrado e doutorado.
 - Atas e fichas de avaliação em PDF, em um ZIP, para uma defesa ou para um período.
+- Cards de um período em um ZIP de PNGs (em **Imprimir**), cada defesa com um modelo sorteado, sem repetir modelo enquanto houver modelos sobrando.
 - Impressão em planilha e exportação em CSV.
 - Calendário assinável: o botão **Calendário** copia o endereço do `.ics` (de um professor, ou de todas as defesas) para assinar no Google Agenda (Outras agendas, +, Do URL), Outlook ou celular. Os calendários são gerados a cada publicação e o aplicativo de agenda atualiza sozinho.
 - Link de uma defesa: no card de divulgação, **Copiar link** gera `d/<id>.html`, que mostra aluno, data e local na prévia do WhatsApp e abre a agenda com o card da defesa.

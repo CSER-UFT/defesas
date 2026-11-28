@@ -194,7 +194,7 @@
 <dialog id="dlgImp">
   <h3>Imprimir planilha e documentos das defesas</h3>
   <div class="form1"><label>Período <select id="impEsc"><option value="semana">Semana exibida</option><option value="futuras">Defesas de hoje em diante</option><option value="todas">Todas as defesas</option></select></label></div>
-  <div class="acoes"><button type="button" id="impFechar">Fechar</button><button type="button" id="impCsv">Baixar CSV</button><button type="button" id="impZip">ZIP de atas e fichas (PDF)</button><button type="button" id="impOk" class="pri">Imprimir</button></div>
+  <div class="acoes"><button type="button" id="impFechar">Fechar</button><button type="button" id="impCsv">Baixar CSV</button><button type="button" id="impCards">ZIP de cards (PNG)</button><button type="button" id="impZip">ZIP de atas e fichas (PDF)</button><button type="button" id="impOk" class="pri">Imprimir</button></div>
 </dialog>
 
 <div id="folhaImp"></div>
@@ -1084,8 +1084,32 @@ async function redesenharCard() {
   if (m === "python") { desenharCard($("cvCard"), info, PALETAS[$("cdPaleta").value]); return; }
   try { await carregarCards(); } catch (e) { $("status").textContent = "Card: " + e.message; $("cdModelo").value = "python"; return redesenharCard(); }
   if (v !== versaoCard) return;
-  // os modelos novos usam os nomes curtos dos professores, como nos cards em LaTeX
-  CARDS.desenhar($("cvCard"), m, Object.assign({}, info, { orientador: info.orientadorCurto, coorientador: info.coorientadorCurto }));
+  desenharModelo($("cvCard"), m, null, info);
+}
+// desenha uma defesa num modelo; os modelos novos usam os nomes curtos dos professores, como nos cards em LaTeX
+function desenharModelo(cv, m, paleta, info) {
+  if (m === "python") desenharCard(cv, info, PALETAS[paleta || paletaAleatoria(null)]);
+  else CARDS.desenhar(cv, m, Object.assign({}, info, { orientador: info.orientadorCurto, coorientador: info.coorientadorCurto }));
+}
+// ZIP com o card de cada defesa do período; os modelos são embaralhados para não se repetirem
+// enquanto houver modelos sobrando, e o card Python recebe uma paleta sorteada
+async function zipCards(ds, rotulo) {
+  if (!ds.length) { $("status").textContent = "Nenhuma defesa no período para gerar cards."; return; }
+  $("status").textContent = "Gerando cards...";
+  try { await carregarCards(); } catch (e) { $("status").textContent = "Card: " + e.message + " Só o modelo Python está disponível."; }
+  const embaralhar = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  let fila = [];
+  const cv = document.createElement("canvas"), arqs = [];
+  for (const d of ds) {
+    if (!fila.length) fila = embaralhar(modelosCard().map(x => x.id));
+    const m = fila.pop(), al = aluno(d.alunoId) || { nome: "aluno" };
+    desenharModelo(cv, m, null, infoCard(d));
+    const b = await new Promise(r => cv.toBlob(r, "image/png"));
+    arqs.push({ nome: aaaammdd(d.data) + "_" + slug(al.nome) + "_" + m + ".png", dados: new Uint8Array(await b.arrayBuffer()) });
+  }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(criarZip(arqs));
+  a.download = "cards_" + rotulo + ".zip"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  $("status").textContent = "ZIP gerado com " + arqs.length + " card(s).";
 }
 async function abrirCard(d) {
   cardDefesa = d;
@@ -1514,6 +1538,7 @@ $("impOk").onclick = () => {
   setTimeout(() => window.print(), 50);
 };
 $("impZip").onclick = () => gerarZip(defesasImp(), $("impEsc").value);
+$("impCards").onclick = () => zipCards(defesasImp(), $("impEsc").value);
 $("impCsv").onclick = () => {
   const cab = ["Data", "Dia", "Início", "Fim", "Duração (min)", "Fase", "Aluno", "Título", "Orientador", "Coorientador", "Demais membros da banca", "Banca completa", "Sala", "Link do local", "PDF do trabalho"];
   const q = t => '"' + String(t).replace(/"/g, '""') + '"';
