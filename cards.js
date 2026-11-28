@@ -628,7 +628,7 @@ function json(c, I, s) {
   I.jsonEtapa.forEach(e => { y += 30; chave(e[0], y); trechos(c, 290, y, [[e[1], mono(21), NU], [",", mono(21), P]]); });
   y += 48 * s; chave("aluno", y); y = str(I.aluno, mono(32 * s, 700), 290, y, true);
   y += 60 * s; chave("titulo", y); y = str(I.titulo, mono(30 * s, 700), 290, y, true);
-  y += 64 * s; chave("orientado", y); T(c, "[", 290, y - 8, mono(22), P);
+  y += 64 * s; chave("orientador", y); T(c, "[", 290, y - 8, mono(22), P);
   const os = orientacao(I);
   os.forEach((o, i) => { y += (i ? 35 : 18) * s; y = str(o, mono(28 * s), 330, y, i < os.length - 1); });
   y += 32 * s; T(c, "],", 290, y, mono(22), P);
